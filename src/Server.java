@@ -1,41 +1,40 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 
 public class Server {
     private static final int PORT = 30751;
+    private static final int DATA_SIZE = 1024;
+
+    /**
+     Used the sample client-server UDP code from Computer Networking: A Top Down Approach, by Kurose and Ross
+     */
 
     public static void main(String[] args) {
         try {
             //Creates server socket, client socket, and output and input objects
-            ServerSocket serverSocket = new ServerSocket(PORT);
-            Socket clientSocket;
-            PrintWriter out;
-            BufferedReader in;
+            DatagramSocket serverSocket = new DatagramSocket(PORT);
+            byte[] incomingData = new byte[DATA_SIZE];
+            byte[] outgoingData;
 
             //Loops and listens for incoming connections
             while (true) {
-                //Accepts an incoming connection
-                clientSocket = serverSocket.accept();
+                //Constructs a datagram packet of a given length and uses this packet to receive data
+                DatagramPacket receivedPacket = new DatagramPacket(incomingData, incomingData.length);
+                serverSocket.receive(receivedPacket);
 
-                //Sets the input and output streams to the connected client socket
-                out = new PrintWriter(clientSocket.getOutputStream(), true);
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                //Converts datagram data to string and displays it
+                String message = new String(receivedPacket.getData());
+                System.out.println("MESSAGE: " + message);
 
-                //Reads input from the client and echos the data as a string
-                String s;
-                while ((s = in.readLine()) != null) {
-                    out.println(s);
-                    System.out.println("Received: " + s);
-                }
+                //Gets ip address and port of sender, and data to send back
+                InetAddress ip = receivedPacket.getAddress();
+                int port = receivedPacket.getPort();
+                String modified = message.toUpperCase();
+                outgoingData = modified.getBytes();
 
-                //closes all streams
-                out.close();
-                in.close();
-                clientSocket.close();
+                //Constructs a new packet to send and sends it to ip address and port
+                DatagramPacket sendPacket = new DatagramPacket(outgoingData, outgoingData.length, ip, port);
+                serverSocket.send(sendPacket);
             }
         } catch (IOException e) {
             e.printStackTrace();
