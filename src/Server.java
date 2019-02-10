@@ -19,7 +19,9 @@ public class Server {
         serverSocket = new DatagramSocket(port);
         handler = new FileHandler();
         this.fileName = fileName;
-        handler.write("test.wav", handler.read(fileName));
+
+
+        handler.write("test.wav", handler.toByteArray(handler.toPacketList(handler.read(fileName), InetAddress.getLocalHost(), port)));
     }
 
     private void run() throws IOException {
