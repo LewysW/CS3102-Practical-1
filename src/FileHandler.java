@@ -1,8 +1,8 @@
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FileHandler {
-    private static final int PACKET_SIZE = 1024;
+    public static final int PACKET_SIZE = 512;
+    //public static final int PAYLOAD_SIZE
 
     public byte[] read(String fileName) throws IOException {
         Path path = Paths.get(fileName);

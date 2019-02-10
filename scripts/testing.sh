@@ -5,8 +5,8 @@
 # i) login to a lab machine and start your server (from the current
 # directory using server.sh) in the background
 # ii) run netem with some specific parameters
-# iii) run your client on the local machine (using client.sh) and play back the sound file
-# iv) run your client on the local machine and write the sound file to disk
+# iii) run your client on the local machine (using client.sh) and play back the audioManager file
+# iv) run your client on the local machine and write the audioManager file to disk
 # 
 # You must have two shell scripts in your code directory:
 # - server.sh which runs your server
