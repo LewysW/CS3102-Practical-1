@@ -12,6 +12,7 @@ public class Client {
     private DatagramSocket clientSocket;
     private InetAddress ip;
     private int port;
+    private String fileName;
     /**
      Used the sample client-server UDP code from Computer Networking: A Top Down Approach, by Kurose and Ross
      */
@@ -26,6 +27,11 @@ public class Client {
         //Gets localhost as ip address
         this.ip = InetAddress.getByName(ip);
         this.port = port;
+    }
+
+    private Client(String ip, int port, String fileName) throws Exception {
+        this(ip, port);
+        this.fileName = fileName;
     }
 
     private void run() throws IOException {
@@ -52,15 +58,23 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        if (args.length == 2) {
+        if (args.length == 2 || args.length == 3) {
+            Client client;
+
             try {
-                Client client = new Client(args[0], Integer.parseInt(args[1]));
+                if (args.length == 2) {
+                    client = new Client(args[0], Integer.parseInt(args[1]));
+                } else {
+                    client = new Client(args[0], Integer.parseInt(args[1]), args[2]);
+                }
+
                 client.run();
-            } catch (Exception e) {
+            } catch(Exception e) {
                 e.printStackTrace();
             }
+
         } else {
-            System.out.println("Usage: 'java Client <ip address> <port>");
+            System.out.println("Usage: 'java Client <host> <port> <optional filename>");
         }
     }
 }

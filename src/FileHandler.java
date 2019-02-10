@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.nio.file.Files;
@@ -11,8 +13,9 @@ public class FileHandler {
         return Files.readAllBytes(path);
     }
 
-    public void write(String path, byte[] file) {
-
+    public void write(String path, byte[] data) throws IOException {
+        FileOutputStream stream = new FileOutputStream(path);
+        stream.write(data);
     }
 
     public ArrayList<DatagramPacket> toPacketList(byte[] file) {

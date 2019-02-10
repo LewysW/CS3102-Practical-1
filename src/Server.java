@@ -8,20 +8,21 @@ public class Server {
     private DatagramSocket serverSocket;
     private FileHandler handler;
     private ArrayList<DatagramPacket> packets;
+    private String fileName;
 
 
     /**
      Used the sample client-server UDP code from Computer Networking: A Top Down Approach, by Kurose and Ross
      */
 
-    private Server(int port) throws SocketException {
+    private Server(int port, String fileName) throws Exception {
         serverSocket = new DatagramSocket(port);
         handler = new FileHandler();
+        this.fileName = fileName;
+        handler.write("test.wav", handler.read(fileName));
     }
 
     private void run() throws IOException {
-        handler.read()
-
         //Creates server socket, client socket, and output and input objects
         byte[] incomingData = new byte[DATA_SIZE];
         byte[] outgoingData;
@@ -49,15 +50,15 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        if (args.length == 1) {
+        if (args.length == 2) {
             try {
-                Server server = new Server(Integer.parseInt(args[0]));
+                Server server = new Server(Integer.parseInt(args[0]), args[1]);
                 server.run();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Usage: 'java Server <port>'");
+            System.out.println("Usage: 'java Server <port> <audiofile>'");
         }
     }
 }
