@@ -107,4 +107,8 @@ public class FileHandler {
         byte[] data = Arrays.copyOfRange(packet.getData(), SEQUENCE_SIZE, SEQUENCE_SIZE + TIMESTAMP_SIZE);
         return bytesToInt(data);
     }
+
+    public byte[] getPayload(DatagramPacket packet) {
+        return Arrays.copyOfRange(packet.getData(), SEQUENCE_SIZE + TIMESTAMP_SIZE, PACKET_SIZE);
+    }
 }
