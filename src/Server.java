@@ -7,6 +7,7 @@ public class Server {
     private FileHandler handler;
     private ArrayList<DatagramPacket> packets;
     private byte[] fileData;
+    private AudioManager audioManager;
 
 
     /**
@@ -17,6 +18,9 @@ public class Server {
         serverSocket = new DatagramSocket(port);
         handler = new FileHandler();
         fileData = handler.read(fileName);
+        audioManager = new AudioManager();
+        audioManager.playSound(fileData);
+        audioManager.playSound(handler.toByteArray(handler.toPacketList(fileData, InetAddress.getLocalHost(), port)));
     }
 
     private void run() throws Exception {

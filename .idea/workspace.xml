@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="164c4721-e4b3-4ee4-8f1c-55950de49bf6" name="Default Changelist" comment="Updated echo client/server to use UDP instead of TCP">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/AudioManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/AudioManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/FileHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/FileHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/META-INF/CS3102-Practical-1.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/Server.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,13 +18,33 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="1913632908">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.18" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="java" value="1740" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JAVA" value="1740" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+            <state relative-caret-position="207">
+              <caret line="21" column="39" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -29,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1005">
-              <caret line="74" column="12" selection-start-line="74" selection-start-column="12" selection-end-line="74" selection-end-column="12" />
+            <state relative-caret-position="285">
+              <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -50,13 +76,15 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FileHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="469">
-              <caret line="34" column="14" selection-start-line="34" selection-start-column="14" selection-end-line="34" selection-end-column="14" />
+            <state relative-caret-position="717">
+              <caret line="77" column="4" selection-start-line="77" selection-start-column="4" selection-end-line="77" selection-end-column="4" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3288#3289#0" expanded="true" />
+                <element signature="e#3375#3376#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -79,11 +107,17 @@
       <list>
         <option value="$PROJECT_DIR$/src/Sound.java" />
         <option value="$PROJECT_DIR$/src/AudioManager.java" />
-        <option value="$PROJECT_DIR$/src/Server.java" />
         <option value="$PROJECT_DIR$/src/Client.java" />
         <option value="$PROJECT_DIR$/src/FileHandler.java" />
+        <option value="$PROJECT_DIR$/src/Server.java" />
       </list>
     </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="27" />
@@ -116,10 +150,13 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1549812335110" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1549978530011" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -133,7 +170,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Client">
+  <component name="RunManager" selected="Application.Server">
     <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Client" />
       <module name="CS3102-Practical-1" />
@@ -156,8 +193,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Client" />
         <item itemvalue="Application.Server" />
+        <item itemvalue="Application.Client" />
       </list>
     </recent_temporary>
   </component>
@@ -171,6 +208,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1549109377726</updated>
+      <workItem from="1549975650010" duration="2858000" />
     </task>
     <task id="LOCAL-00001" summary="Updated echo client/server to use UDP instead of TCP">
       <created>1549112613451</created>
@@ -189,20 +227,24 @@
     <option name="localTasksCounter" value="3" />
     <servers />
   </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="2858000" />
+  </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="27" width="1920" height="1020" extended-state="6" />
+    <frame x="-1" y="0" width="2050" height="1125" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26040554" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16133866" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3295583" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3295583" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32934132" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997735" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -211,6 +253,8 @@
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Messages" order="10" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Maven Projects" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -249,31 +293,17 @@
       <window_info anchor="right" id="Palette&#9;" order="7" />
     </layout-to-restore>
   </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated echo client/server to use UDP instead of TCP" />
     <option name="LAST_COMMIT_MESSAGE" value="Updated echo client/server to use UDP instead of TCP" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="74" column="12" selection-start-line="74" selection-start-column="12" selection-end-line="74" selection-end-column="12" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AudioManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -286,8 +316,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FileHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="469">
-          <caret line="34" column="14" selection-start-line="34" selection-start-column="14" selection-end-line="34" selection-end-column="14" />
+        <state relative-caret-position="717">
+          <caret line="77" column="4" selection-start-line="77" selection-start-column="4" selection-end-line="77" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3288#3289#0" expanded="true" />
+            <element signature="e#3375#3376#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="21" column="39" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
