@@ -62,6 +62,7 @@ public class Client {
                     //Receives modified data from server and displays it
                     DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
                     clientSocket.receive(receivedPacket);
+                    System.out.println("Sequence Number: " + handler.getSequenceNumber(receivedPacket) + " Timestamp: " + handler.getTimeStamp(receivedPacket));
                     packets.add(receivedPacket);
                 } catch (SocketTimeoutException e) {
                     e.printStackTrace();
@@ -71,7 +72,6 @@ public class Client {
 
             System.out.println(handler.toByteArray(packets).length);
             System.out.println(packets.size());
-            audioManager.playSound(handler.toByteArray(packets));
             handler.write("client.wav", handler.toByteArray(packets));
         }
 

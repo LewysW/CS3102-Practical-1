@@ -19,7 +19,6 @@ public class Server {
         handler = new FileHandler();
         fileData = handler.read(fileName);
         audioManager = new AudioManager();
-        audioManager.playSound(fileData);
         audioManager.playSound(handler.toByteArray(handler.toPacketList(fileData, InetAddress.getLocalHost(), port)));
     }
 

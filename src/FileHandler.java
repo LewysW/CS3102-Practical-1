@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 
 import static java.util.Arrays.copyOfRange;
 
+//TODO - add functions to extract data from a single packet
 public class FileHandler {
     public static final int SIZE_OF_INT = 4;
     //20ms timestamp interval
@@ -35,7 +37,6 @@ public class FileHandler {
         ArrayList<DatagramPacket> packets = new ArrayList<>();
         int seqNum = 0;
         int timeStamp = 0;
-        //TODO - append header information at beginning of each packet
 
         for (int i = 0; i < file.length; i += PAYLOAD_SIZE) {
             byte[] packetData = new byte[PACKET_SIZE];
@@ -51,7 +52,7 @@ public class FileHandler {
                 System.arraycopy(file, i, packetData, SEQUENCE_SIZE + TIMESTAMP_SIZE, PAYLOAD_SIZE);
             } else {
                 //Copies audio file data if rest of file is less than the payload of a packet
-                //TODO - zero terminate rest of packet
+                //TODO - null terminate rest of packet
                 System.arraycopy(file, i, packetData, SEQUENCE_SIZE + TIMESTAMP_SIZE, file.length - i);
             }
 
@@ -95,5 +96,15 @@ public class FileHandler {
      */
     public int bytesToInt(byte[] myBytes) {
         return ByteBuffer.wrap(myBytes).order(ByteOrder.LITTLE_ENDIAN).getInt();
+    }
+
+    public int getSequenceNumber(DatagramPacket packet) {
+        byte[] data = Arrays.copyOfRange(packet.getData(), 0, SEQUENCE_SIZE);
+        return bytesToInt(data);
+    }
+
+    public int getTimeStamp(DatagramPacket packet) {
+        byte[] data = Arrays.copyOfRange(packet.getData(), SEQUENCE_SIZE, SEQUENCE_SIZE + TIMESTAMP_SIZE);
+        return bytesToInt(data);
     }
 }
