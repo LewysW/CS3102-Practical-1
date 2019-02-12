@@ -18,9 +18,6 @@ public class Server {
         serverSocket = new DatagramSocket(port);
         handler = new FileHandler();
         fileData = handler.read(fileName);
-        audioManager = new AudioManager();
-        audioManager.playSound(handler.toByteArray(handler.toPacketList(fileData, InetAddress.getLocalHost(), port)));
-        handler.write("server.wav", handler.toByteArray(handler.toPacketList(fileData, InetAddress.getLocalHost(), port)));
     }
 
     private void run() throws Exception {

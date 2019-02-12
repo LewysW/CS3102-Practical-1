@@ -18,10 +18,10 @@ public class FileHandler {
     public static final int SIZE_OF_INT = 4;
     //20ms timestamp interval
     public static final int TIMESTAMP_INTERVAL = 20;
-    public static final int PACKET_SIZE = 512;
+    public static final int PACKET_SIZE = 256;
     public static final int SEQUENCE_SIZE = 4;
     public static final int TIMESTAMP_SIZE = 4;
-    public static final int PAYLOAD_SIZE = 504;
+    public static final int PAYLOAD_SIZE = 248;
 
     public byte[] read(String fileName) throws IOException {
         Path path = Paths.get(fileName);
@@ -71,6 +71,13 @@ public class FileHandler {
             System.arraycopy(packet.getData(), SEQUENCE_SIZE + TIMESTAMP_SIZE, fileData, index, PAYLOAD_SIZE);
             index += PAYLOAD_SIZE;
         }
+
+        return fileData;
+    }
+
+    public byte[] toByteArray(DatagramPacket packet) {
+        byte[] fileData = new byte[PACKET_SIZE];
+        System.arraycopy(packet.getData(), SEQUENCE_SIZE + TIMESTAMP_SIZE, fileData, 0, PAYLOAD_SIZE);
 
         return fileData;
     }
