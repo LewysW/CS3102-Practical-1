@@ -18,10 +18,10 @@ public class FileHandler {
     public static final int SIZE_OF_INT = 4;
     //20ms timestamp interval
     public static final int TIMESTAMP_INTERVAL = 20;
-    public static final int PACKET_SIZE = 256;
+    public static final int PACKET_SIZE = 232;
     public static final int SEQUENCE_SIZE = 4;
     public static final int TIMESTAMP_SIZE = 4;
-    public static final int PAYLOAD_SIZE = 248;
+    public static final int PAYLOAD_SIZE = 224;
 
     public byte[] read(String fileName) throws IOException {
         Path path = Paths.get(fileName);

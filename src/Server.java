@@ -7,7 +7,6 @@ public class Server {
     private FileHandler handler;
     private ArrayList<DatagramPacket> packets;
     private byte[] fileData;
-    private AudioManager audioManager;
 
 
     /**

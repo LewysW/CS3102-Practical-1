@@ -36,10 +36,6 @@ public class AudioManager {
         sourceDataLine.close();
     }
 
-    public AudioInputStream getAudioInputStream() {
-        return audioInputStream;
-    }
-
     public void setAudioInputStream(AudioInputStream audioInputStream) {
         this.audioInputStream = audioInputStream;
     }
