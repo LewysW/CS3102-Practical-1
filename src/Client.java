@@ -72,7 +72,7 @@ public class Client {
             System.out.println(handler.toByteArray(packets).length);
             System.out.println(packets.size());
             audioManager.playSound(handler.toByteArray(packets));
-            //handler.write("client.wav", handler.toByteArray(packets));
+            handler.write("client.wav", handler.toByteArray(packets));
         }
 
         clientSocket.close();
