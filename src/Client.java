@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Client {
     //TODO - validate input size
-    private static final int TIMEOUT = 5000;
+    private static final int TIMEOUT = 1000;
     private BufferedReader stdIn;
     private DatagramSocket clientSocket;
     private InetAddress ip;
@@ -52,22 +52,27 @@ public class Client {
 
         String message;
         while ((message = stdIn.readLine()) != null) {
+            message = stdIn.readLine();
             //Reads in message from user and sends it to server
             sendData = message.getBytes();
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
             clientSocket.send(sendPacket);
+            DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
 
             while (true) {
                 try {
                     //Receives modified data from server and displays it
-                    DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
                     clientSocket.receive(receivedPacket);
                     System.out.println("Sequence Number: " + handler.getSequenceNumber(receivedPacket) + " Timestamp: " + handler.getTimeStamp(receivedPacket));
-                    packets.add(receivedPacket);
+                    packets.add(new DatagramPacket(receivedPacket.getData().clone(), receivedPacket.getLength()));
                 } catch (SocketTimeoutException e) {
                     e.printStackTrace();
                     break;
                 }
+            }
+
+            for (int i = 0; i < packets.size(); i++) {
+                System.out.println("Sequence Number: " + handler.getSequenceNumber(packets.get(i)) + " Timestamp: " + handler.getTimeStamp(packets.get(i)));
             }
 
             System.out.println(handler.toByteArray(packets).length);

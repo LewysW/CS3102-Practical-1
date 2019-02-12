@@ -20,6 +20,7 @@ public class Server {
         fileData = handler.read(fileName);
         audioManager = new AudioManager();
         audioManager.playSound(handler.toByteArray(handler.toPacketList(fileData, InetAddress.getLocalHost(), port)));
+        handler.write("server.wav", handler.toByteArray(handler.toPacketList(fileData, InetAddress.getLocalHost(), port)));
     }
 
     private void run() throws Exception {
