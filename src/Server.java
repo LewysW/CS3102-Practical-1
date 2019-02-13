@@ -42,7 +42,7 @@ public class Server {
                 System.out.println(packets.size());
 
                 for (DatagramPacket packet : packets) {
-                    TimeUnit.MILLISECONDS.sleep(1);
+                    TimeUnit.MICROSECONDS.sleep(1);
                     serverSocket.send(packet);
                 }
             }

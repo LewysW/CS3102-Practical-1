@@ -9,12 +9,16 @@ public class AudioManager {
 
     private AudioInputStream audioInputStream;
     private AudioFormat format;
-    private static int sampleRate = 44100;
+    private static final float SAMPLE_RATE = 44100f;
+    private static final int SAMPLE_SIZE_IN_BITS = 16;
+    private static final int NUM_CHANNELS = 2;
+    private static final int FRAME_SIZE = 4;
+    private static final int FRAME_RATE = 44100;
     private static DataLine.Info dataLineInfo;
     private static SourceDataLine sourceDataLine;
 
     public void start() throws Exception {
-        format = new AudioFormat(sampleRate, 16, 2, true, false);
+        format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, SAMPLE_SIZE_IN_BITS, NUM_CHANNELS, FRAME_SIZE, FRAME_RATE, false);
         dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
         sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
         sourceDataLine.open(format);

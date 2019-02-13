@@ -13,15 +13,14 @@ import java.util.Arrays;
 
 import static java.util.Arrays.copyOfRange;
 
-//TODO - add functions to extract data from a single packet
 public class FileHandler {
     public static final int SIZE_OF_INT = 4;
     //20ms timestamp interval
     public static final int TIMESTAMP_INTERVAL = 20;
-    public static final int PACKET_SIZE = 232;
+    public static final int PACKET_SIZE = 224;
     public static final int SEQUENCE_SIZE = 4;
     public static final int TIMESTAMP_SIZE = 4;
-    public static final int PAYLOAD_SIZE = 224;
+    public static final int PAYLOAD_SIZE = 216;
 
     public byte[] read(String fileName) throws IOException {
         Path path = Paths.get(fileName);
@@ -52,7 +51,6 @@ public class FileHandler {
                 System.arraycopy(file, i, packetData, SEQUENCE_SIZE + TIMESTAMP_SIZE, PAYLOAD_SIZE);
             } else {
                 //Copies audio file data if rest of file is less than the payload of a packet
-                //TODO - null terminate rest of packet
                 System.arraycopy(file, i, packetData, SEQUENCE_SIZE + TIMESTAMP_SIZE, file.length - i);
             }
 
