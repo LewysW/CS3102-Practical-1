@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 public class Server {
     private DatagramSocket serverSocket;
     private FileHandler handler;
-    private PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<DatagramPacket>(65536, new SequenceNumberComparator());
+    private ArrayList<DatagramPacket> packetList = new ArrayList<>();
     private byte[] fileData;
 
 
@@ -43,12 +43,12 @@ public class Server {
                 outgoing = ("POLO").getBytes();
                 serverSocket.send(new DatagramPacket(outgoing, outgoing.length, ip, port));
 
-                packetQueue = handler.toPacketQueue(fileData, ip, port);
-                System.out.println(packetQueue.size());
+                packetList = handler.toPacketList(fileData, ip, port);
+                System.out.println(packetList.size());
 
-                while (!packetQueue.isEmpty()) {
+                for (DatagramPacket packet: packetList) {
                     TimeUnit.MICROSECONDS.sleep(1);
-                    serverSocket.send(packetQueue.remove());
+                    serverSocket.send(packet);
                 }
             }
         }

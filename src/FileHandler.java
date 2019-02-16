@@ -63,6 +63,35 @@ public class FileHandler {
         return queue;
     }
 
+    public ArrayList<DatagramPacket> toPacketList(byte[] file, InetAddress ip, int port) {
+        ArrayList<DatagramPacket> packets = new ArrayList<>();
+        int seqNum = 0;
+        int timeStamp = 0;
+
+        for (int i = 0; i < file.length; i += PAYLOAD_SIZE) {
+            byte[] packetData = new byte[PACKET_SIZE];
+
+            //Copies sequence number byte array to packet
+            System.arraycopy(intToBytes(seqNum++), 0, packetData, 0, SEQUENCE_SIZE);
+
+            //Copies time stamp byte array to packet
+            System.arraycopy(intToBytes(timeStamp += TIMESTAMP_INTERVAL), 0, packetData, SEQUENCE_SIZE, TIMESTAMP_SIZE);
+
+            //Copies audio file data (payload) to packet if amount of data remaining is >= 504 bytes
+            if (i + PAYLOAD_SIZE < file.length) {
+                System.arraycopy(file, i, packetData, SEQUENCE_SIZE + TIMESTAMP_SIZE, PAYLOAD_SIZE);
+            } else {
+                //Copies audio file data if rest of file is less than the payload of a packet
+                System.arraycopy(file, i, packetData, SEQUENCE_SIZE + TIMESTAMP_SIZE, file.length - i);
+            }
+
+            DatagramPacket packet = new DatagramPacket(packetData, PACKET_SIZE, ip, port);
+            packets.add(packet);
+        }
+
+        return packets;
+    }
+
     public byte[] toByteArray(PriorityQueue<DatagramPacket> packets) {
         byte[] fileData = new byte[packets.size() * PACKET_SIZE];
         int index = 0;
@@ -70,6 +99,17 @@ public class FileHandler {
 
         while (!queue.isEmpty()) {
             System.arraycopy(queue.remove().getData(), SEQUENCE_SIZE + TIMESTAMP_SIZE, fileData, index, PAYLOAD_SIZE);
+            index += PAYLOAD_SIZE;
+        }
+        return fileData;
+    }
+
+    public byte[] toByteArray(ArrayList<DatagramPacket> packets) {
+        byte[] fileData = new byte[packets.size() * PACKET_SIZE];
+        int index = 0;
+
+        for (DatagramPacket packet: packets) {
+            System.arraycopy(packet.getData(), SEQUENCE_SIZE + TIMESTAMP_SIZE, fileData, index, PAYLOAD_SIZE);
             index += PAYLOAD_SIZE;
         }
         return fileData;

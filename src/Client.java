@@ -90,8 +90,9 @@ public class Client {
                 clientSocket.receive(received);
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(received.getData());
                 packetQueue.add(new DatagramPacket(received.getData().clone(), received.getLength()));
+
                 audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
-                audioManager.playSound(handler.getPayload(received));
+                audioManager.playSound(handler.getPayload(packetQueue.remove()));
             } catch (SocketTimeoutException e) {
                 e.printStackTrace();
                 break;
