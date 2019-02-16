@@ -23,7 +23,6 @@ public class Server {
     private void run() throws Exception {
         //Creates server socket, client socket, and output and input objects
         byte[] incomingData = new byte[handler.PACKET_SIZE];
-        byte[] outgoing = new byte[handler.PACKET_SIZE];
 
         //Loops and listens for incoming connections
         while (true) {
@@ -39,10 +38,7 @@ public class Server {
             InetAddress ip = receivedPacket.getAddress();
             int port = receivedPacket.getPort();
 
-            if (message.startsWith("MARCO")) {
-                outgoing = ("POLO").getBytes();
-                serverSocket.send(new DatagramPacket(outgoing, outgoing.length, ip, port));
-
+            if (message.startsWith("GET")) {
                 packetQueue = handler.toPacketQueue(fileData, ip, port);
                 System.out.println(packetQueue.size());
 
@@ -51,6 +47,8 @@ public class Server {
                     serverSocket.send(packetQueue.remove());
                 }
             }
+
+            System.out.println(handler.toByteArray(packetQueue).length);
         }
     }
 

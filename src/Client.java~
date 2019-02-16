@@ -48,28 +48,27 @@ public class Client {
     }
 
     private void run() throws Exception {
-        byte[] receiveData = new byte[handler.PACKET_SIZE];
-        byte[] sendData = ("MARCO").getBytes();
+        String message;
 
-        DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
-        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
-        clientSocket.send(sendPacket);
+        while ((message = stdIn.readLine()) != null) {
+            //Reads in message from user and sends it to server
 
-        while (!(new String(receivedPacket.getData())).startsWith("POLO")) {
-            try {
-                clientSocket.receive(receivedPacket);
-            } catch (SocketTimeoutException e) {
-                clientSocket.send(sendPacket);
+            if (message.startsWith("GET")) {
+                packetQueue = streamFile();
             }
+
+            handler.write("client.wav", handler.toByteArray(packetQueue));
+
+            System.out.println(handler.toByteArray(packetQueue).length);
+            System.out.println(packetQueue.size());
+
+            while (!packetQueue.isEmpty()) {
+                DatagramPacket p = packetQueue.remove();
+                System.out.println("Sequence Number: " + handler.getSequenceNumber(p) + " Timestamp: " + handler.getTimeStamp(p));
+            }
+
+            //TODO - only write to file if argument is provided
         }
-
-        packetQueue = streamFile(sendPacket, receivedPacket);
-        handler.write("client.wav", handler.toByteArray(packetQueue));
-
-        System.out.println(handler.toByteArray(packetQueue).length);
-        System.out.println(packetQueue.size());
-
-        //TODO - only write to file if argument is provided
 
         clientSocket.close();
     }
@@ -79,19 +78,25 @@ public class Client {
      * @return - list of packets that make up file
      * @throws IOException
      */
-    public PriorityQueue<DatagramPacket> streamFile(DatagramPacket sent, DatagramPacket received) throws Exception {
+    public PriorityQueue<DatagramPacket> streamFile() throws Exception {
         PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<>(63556, new SequenceNumberComparator());
+        String message = "GET";
+        byte[] receiveData = new byte[handler.PACKET_SIZE];
+        byte[] sendData = message.getBytes();
 
+        DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
+        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
+        clientSocket.send(sendPacket);
         audioManager.start();
 
         while (true) {
             try {
                 //Receives modified data from server and displays it
-                clientSocket.receive(received);
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(received.getData());
-                packetQueue.add(new DatagramPacket(received.getData().clone(), received.getLength()));
-                audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
-                audioManager.playSound(handler.getPayload(received));
+                clientSocket.receive(receivedPacket);
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(receivedPacket.getData());
+                packetQueue.add(new DatagramPacket(receivedPacket.getData().clone(), receivedPacket.getLength()));
+                audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), receivedPacket.getLength()));
+                audioManager.playSound(handler.getPayload(receivedPacket));
             } catch (SocketTimeoutException e) {
                 e.printStackTrace();
                 break;
