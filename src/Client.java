@@ -69,7 +69,7 @@ public class Client {
         System.out.println(handler.toByteArray(packetQueue).length);
         System.out.println(packetQueue.size());
 
-        //TODO - only write to file if argument is provided
+        //TODO - enable writing to file if argument is provided (may have to preserve data from PriorityQueue)
 
         clientSocket.close();
     }
@@ -81,7 +81,6 @@ public class Client {
      */
     public PriorityQueue<DatagramPacket> streamFile(DatagramPacket sent, DatagramPacket received) throws Exception {
         PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<>(63556, new SequenceNumberComparator());
-
         audioManager.start();
 
         while (true) {
