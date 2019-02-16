@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.PriorityQueue;
 
 import static java.util.Arrays.copyOfRange;
 
@@ -32,8 +33,9 @@ public class FileHandler {
         stream.write(data);
     }
 
-    public ArrayList<DatagramPacket> toPacketList(byte[] file, InetAddress ip, int port) {
-        ArrayList<DatagramPacket> packets = new ArrayList<>();
+    public PriorityQueue<DatagramPacket> toPacketQueue(byte[] file, InetAddress ip, int port) {
+        PriorityQueue<DatagramPacket> queue = new PriorityQueue<>(65536, new SequenceNumberComparator());
+
         int seqNum = 0;
         int timeStamp = 0;
 
@@ -55,21 +57,21 @@ public class FileHandler {
             }
 
             DatagramPacket packet = new DatagramPacket(packetData, PACKET_SIZE, ip, port);
-            packets.add(packet);
+            queue.add(packet);
         }
 
-        return packets;
+        return queue;
     }
 
-    public byte[] toByteArray(ArrayList<DatagramPacket> packets) {
+    public byte[] toByteArray(PriorityQueue<DatagramPacket> packets) {
         byte[] fileData = new byte[packets.size() * PACKET_SIZE];
         int index = 0;
+        PriorityQueue<DatagramPacket> queue = new PriorityQueue<>(packets);
 
-        for (DatagramPacket packet : packets) {
-            System.arraycopy(packet.getData(), SEQUENCE_SIZE + TIMESTAMP_SIZE, fileData, index, PAYLOAD_SIZE);
+        while (!queue.isEmpty()) {
+            System.arraycopy(queue.remove().getData(), SEQUENCE_SIZE + TIMESTAMP_SIZE, fileData, index, PAYLOAD_SIZE);
             index += PAYLOAD_SIZE;
         }
-
         return fileData;
     }
 

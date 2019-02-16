@@ -1,11 +1,12 @@
 import java.net.*;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
 
 public class Server {
     private DatagramSocket serverSocket;
     private FileHandler handler;
-    private ArrayList<DatagramPacket> packets;
+    private PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<DatagramPacket>(65536, new SequenceNumberComparator());
     private byte[] fileData;
 
 
@@ -38,16 +39,16 @@ public class Server {
             int port = receivedPacket.getPort();
 
             if (message.startsWith("GET")) {
-                packets = handler.toPacketList(fileData, ip, port);
-                System.out.println(packets.size());
+                packetQueue = handler.toPacketQueue(fileData, ip, port);
+                System.out.println(packetQueue.size());
 
-                for (DatagramPacket packet : packets) {
+                while (!packetQueue.isEmpty()) {
                     TimeUnit.MICROSECONDS.sleep(1);
-                    serverSocket.send(packet);
+                    serverSocket.send(packetQueue.remove());
                 }
             }
 
-            System.out.println(handler.toByteArray(packets).length);
+            System.out.println(handler.toByteArray(packetQueue).length);
         }
     }
 

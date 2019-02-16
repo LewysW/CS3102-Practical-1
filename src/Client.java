@@ -1,4 +1,5 @@
 import javax.sound.sampled.*;
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class Client {
     private static final int TIMEOUT = 1000;
@@ -16,7 +18,7 @@ public class Client {
     private InetAddress ip;
     private int port;
     private String fileName;
-    private ArrayList<DatagramPacket> packets;
+    private PriorityQueue<DatagramPacket> packetQueue;
     private FileHandler handler;
     private AudioManager audioManager;
     /**
@@ -35,7 +37,7 @@ public class Client {
         this.ip = InetAddress.getByName(ip);
         this.port = port;
 
-        packets = new ArrayList<>();
+        packetQueue = new PriorityQueue<>(63556, new SequenceNumberComparator());
         handler = new FileHandler();
         audioManager = new AudioManager();
     }
@@ -52,18 +54,20 @@ public class Client {
             //Reads in message from user and sends it to server
 
             if (message.startsWith("GET")) {
-                packets = streamFile();
+                packetQueue = streamFile();
             }
 
-            for (int i = 0; i < packets.size(); i++) {
-                System.out.println("Sequence Number: " + handler.getSequenceNumber(packets.get(i)) + " Timestamp: " + handler.getTimeStamp(packets.get(i)));
-            }
+            handler.write("client.wav", handler.toByteArray(packetQueue));
 
-            System.out.println(handler.toByteArray(packets).length);
-            System.out.println(packets.size());
+            System.out.println(handler.toByteArray(packetQueue).length);
+            System.out.println(packetQueue.size());
+
+            while (!packetQueue.isEmpty()) {
+                DatagramPacket p = packetQueue.remove();
+                System.out.println("Sequence Number: " + handler.getSequenceNumber(p) + " Timestamp: " + handler.getTimeStamp(p));
+            }
 
             //TODO - only write to file if argument is provided
-            handler.write("client.wav", handler.toByteArray(packets));
         }
 
         clientSocket.close();
@@ -74,8 +78,8 @@ public class Client {
      * @return - list of packets that make up file
      * @throws IOException
      */
-    public ArrayList<DatagramPacket> streamFile() throws Exception {
-        ArrayList<DatagramPacket> packets = new ArrayList<>();
+    public PriorityQueue<DatagramPacket> streamFile() throws Exception {
+        PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<>(63556, new SequenceNumberComparator());
         String message = "GET";
         byte[] receiveData = new byte[handler.PACKET_SIZE];
         byte[] sendData = message.getBytes();
@@ -90,7 +94,7 @@ public class Client {
                 //Receives modified data from server and displays it
                 clientSocket.receive(receivedPacket);
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(receivedPacket.getData());
-                packets.add(new DatagramPacket(receivedPacket.getData().clone(), receivedPacket.getLength()));
+                packetQueue.add(new DatagramPacket(receivedPacket.getData().clone(), receivedPacket.getLength()));
                 audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), receivedPacket.getLength()));
                 audioManager.playSound(handler.getPayload(receivedPacket));
             } catch (SocketTimeoutException e) {
@@ -101,11 +105,7 @@ public class Client {
 
         audioManager.end();
 
-        for (DatagramPacket p: packets) {
-            System.out.println("Sequence Number: " + handler.getSequenceNumber(p));
-        }
-
-        return packets;
+        return packetQueue;
     }
 
     public static void main(String[] args) {
