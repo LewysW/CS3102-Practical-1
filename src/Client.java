@@ -17,7 +17,7 @@ public class Client {
     private DatagramSocket clientSocket;
     private InetAddress ip;
     private int port;
-    private String fileName;
+    private String fileName = null;
     private PriorityQueue<DatagramPacket> packetQueue;
     private FileHandler handler;
     private AudioManager audioManager;
@@ -50,6 +50,7 @@ public class Client {
     private void run() throws Exception {
         byte[] receiveData = new byte[handler.PACKET_SIZE];
         byte[] sendData = ("MARCO").getBytes();
+        ArrayList<DatagramPacket> packetList;
 
         DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
@@ -63,8 +64,11 @@ public class Client {
             }
         }
 
-        packetQueue = streamFile(sendPacket, receivedPacket);
-        handler.write("client.wav", handler.toByteArray(packetQueue));
+        //If filename argument has been provided, write stream audio to file.
+        if (fileName != null) {
+            packetList = streamFile(sendPacket, receivedPacket);
+            handler.write("client.wav", handler.toByteArray(packetQueue));
+        }
 
         System.out.println(handler.toByteArray(packetQueue).length);
         System.out.println(packetQueue.size());
@@ -79,8 +83,9 @@ public class Client {
      * @return - list of packets that make up file
      * @throws IOException
      */
-    public PriorityQueue<DatagramPacket> streamFile(DatagramPacket sent, DatagramPacket received) throws Exception {
+    public ArrayList<DatagramPacket> streamFile(DatagramPacket sent, DatagramPacket received) throws Exception {
         PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<>(63556, new SequenceNumberComparator());
+        ArrayList<DatagramPacket> packetList = new ArrayList<>();
         audioManager.start();
 
         while (true) {
@@ -90,6 +95,7 @@ public class Client {
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(received.getData());
                 packetQueue.add(new DatagramPacket(received.getData().clone(), received.getLength()));
 
+                packetList.add(packetQueue.peek());
                 audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
                 audioManager.playSound(handler.getPayload(packetQueue.remove()));
             } catch (SocketTimeoutException e) {
@@ -100,7 +106,7 @@ public class Client {
 
         audioManager.end();
 
-        return packetQueue;
+        return packetList;
     }
 
     public static void main(String[] args) {
