@@ -13,6 +13,7 @@ import java.util.PriorityQueue;
 
 public class Client {
     private static final int TIMEOUT = 1000;
+    private static final int BUFFERED_PACKET_NUM = 5000;
     private BufferedReader stdIn;
     private DatagramSocket clientSocket;
     private InetAddress ip;
@@ -64,14 +65,15 @@ public class Client {
             }
         }
 
+        packetList = streamFile(sendPacket, receivedPacket);
+
         //If filename argument has been provided, write stream audio to file.
         if (fileName != null) {
-            packetList = streamFile(sendPacket, receivedPacket);
-            handler.write("client.wav", handler.toByteArray(packetQueue));
+            handler.write("client.wav", handler.toByteArray(packetList));
         }
 
-        System.out.println(handler.toByteArray(packetQueue).length);
-        System.out.println(packetQueue.size());
+        System.out.println(handler.toByteArray(packetList).length);
+        System.out.println(packetList.size());
 
         //TODO - enable writing to file if argument is provided (may have to preserve data from PriorityQueue)
 
@@ -87,19 +89,35 @@ public class Client {
         PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<>(63556, new SequenceNumberComparator());
         ArrayList<DatagramPacket> packetList = new ArrayList<>();
         audioManager.start();
+        boolean buffered = false;
+        ByteArrayInputStream byteArrayInputStream = null;
 
         while (true) {
             try {
                 //Receives modified data from server and displays it
                 clientSocket.receive(received);
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(received.getData());
+                byteArrayInputStream = new ByteArrayInputStream(received.getData());
                 packetQueue.add(new DatagramPacket(received.getData().clone(), received.getLength()));
 
-                packetList.add(packetQueue.peek());
-                audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
-                audioManager.playSound(handler.getPayload(packetQueue.remove()));
+                //Initially fills up packet queue with packets to allow for some form of buffering
+                if (packetQueue.size() > BUFFERED_PACKET_NUM || buffered) {
+                    buffered = true;
+                    packetList.add(packetQueue.peek());
+                    audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
+                    audioManager.playSound(handler.getPayload(packetQueue.remove()));
+                }
             } catch (SocketTimeoutException e) {
-                e.printStackTrace();
+                //If server has finished receiving packets, play out remaining packets if they exist
+                if (packetQueue.size() > 0) {
+                    while (!packetQueue.isEmpty()) {
+                        packetList.add(packetQueue.peek());
+                        audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
+                        audioManager.playSound(handler.getPayload(packetQueue.remove()));
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+
                 break;
             }
         }
