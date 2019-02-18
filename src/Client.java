@@ -53,10 +53,12 @@ public class Client {
         byte[] sendData = ("MARCO").getBytes();
         ArrayList<DatagramPacket> packetList;
 
+        //Sends the initial stage of the 'handshake' 'MARCO'
         DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
         clientSocket.send(sendPacket);
 
+        //Waits for server's response containing 'POLO'
         while (!(new String(receivedPacket.getData())).startsWith("POLO")) {
             try {
                 clientSocket.receive(receivedPacket);

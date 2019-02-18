@@ -1,6 +1,8 @@
+import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class Server {
@@ -46,9 +48,38 @@ public class Server {
                 packetList = handler.toPacketList(fileData, ip, port);
                 System.out.println(packetList.size());
 
+                Thread listenerThread = new Thread(new Listener());
+
                 for (DatagramPacket packet: packetList) {
                     TimeUnit.MICROSECONDS.sleep(1);
                     serverSocket.send(packet);
+
+                    if (!listenerThread.isAlive()) {
+                        listenerThread.start();
+                    }
+                }
+            }
+        }
+    }
+
+    class Listener implements Runnable {
+        @Override
+        public void run() {
+            byte[] incomingData = new byte[handler.PACKET_SIZE];
+            DatagramPacket packet = new DatagramPacket(incomingData, incomingData.length);
+            int sequenceNumber = -1;
+
+            while (!serverSocket.isClosed()) {
+                try {
+                    serverSocket.receive(packet);
+                    System.out.println("HAHA!");
+                    if (handler.getSequenceNumber(packet) != sequenceNumber) {
+                        sequenceNumber = handler.getSequenceNumber(packet);
+                        serverSocket.send(packetList.get(sequenceNumber));
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
