@@ -10,7 +10,9 @@ public class Server {
     private ArrayList<DatagramPacket> packetList = new ArrayList<>();
     private byte[] fileData;
     //Timeout is 100ms
-    private static final int TIMEOUT = 100;
+    private static final int ACK_TIMEOUT = 100;
+    //Size of selective resend buffer in number of packets
+    private static final int SR_BUFFER_SIZE = 60;
 
 
     /**
@@ -52,7 +54,7 @@ public class Server {
 
                 ArrayList<PacketHandler> srBuffer = new ArrayList<>();
                 int BASE = 0;
-                int N = 10;
+                int N = SR_BUFFER_SIZE;
 
 
                 for (int i = 0; i < N; i++) srBuffer.add(new PacketHandler(packetList.get(i)));
@@ -62,13 +64,16 @@ public class Server {
 
                 //TODO - put into selectiveResend() function
                 //Iterates through packets while SR buffer has not reached end of packet list
-                while (N < packetList.size()) {
+                while (N < packetList.size() || !srBuffer.isEmpty()) {
                     //Shifts the boundaries of the SR (Selective Resend) buffer if the first packet has been acknowledged
                     if (srBuffer.get(BASE % (N - BASE)).isAcked()) {
-                        srBuffer.add(new PacketHandler(packetList.get(N)));
                         srBuffer.remove(BASE % (N - BASE));
+
+                        if (N < packetList.size()) {
+                            srBuffer.add(new PacketHandler(packetList.get(N++)));
+                        }
+
                         BASE++;
-                        N++;
                         continue;
                     }
 
@@ -79,7 +84,7 @@ public class Server {
 
                         //If packets has not been sent, or its ack time has elapsed - resend. Otherwise if it has been acknowledged
                         //do nothing
-                        if ((current.getTime() == -1 || elapsed - current.getTime() > TIMEOUT) && !current.isAcked()) {
+                        if ((current.getTime() == -1 || elapsed - current.getTime() > ACK_TIMEOUT) && !current.isAcked()) {
                             srBuffer.get(i).setTime(new Date().getTime() - start);
                             serverSocket.send(srBuffer.get(i).getPacket());
                         }
@@ -96,6 +101,8 @@ public class Server {
                         }
                     }
                 }
+
+                System.out.println("TRANSMISSION FINISHED");
 
                 //TODO - put into separate stopAndWait() function
                 /*

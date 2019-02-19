@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class Client {
     //TODO - localise some variables
     private static final int TIMEOUT = 1000;
-    private static final int BUFFERED_PACKET_NUM = 10000;
+    private static final int BUFFERED_PACKET_NUM = 50000;
     private DatagramSocket clientSocket;
     private InetAddress ip;
     private int port;
@@ -90,7 +90,6 @@ public class Client {
         ArrayList<Integer> seqNums = new ArrayList<>();
         boolean buffered = false;
         ByteArrayInputStream byteArrayInputStream = null;
-        byte[] data = new byte[handler.SEQUENCE_SIZE];
 
         audioManager.start();
 
@@ -98,6 +97,7 @@ public class Client {
             try {
                 //Receives modified data from server and displays it
                 clientSocket.receive(received);
+                System.out.println("RECEIVED: " + handler.getSequenceNumber(received));
                 clientSocket.send(new DatagramPacket(handler.intToBytes(handler.getSequenceNumber(received)), handler.SEQUENCE_SIZE, ip, port));
                 byteArrayInputStream = new ByteArrayInputStream(received.getData());
 
