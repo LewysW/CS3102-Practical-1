@@ -1,9 +1,5 @@
-import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class Server {
     private DatagramSocket serverSocket;
@@ -26,11 +22,11 @@ public class Server {
         //Creates server socket, client socket, and output and input objects
         byte[] incomingData = new byte[handler.PACKET_SIZE];
         byte[] outgoing = new byte[handler.PACKET_SIZE];
+        DatagramPacket receivedPacket = new DatagramPacket(incomingData, incomingData.length);
+        boolean ack;
 
         //Loops and listens for incoming connections
         while (true) {
-            //Constructs a datagram packet of a given length and uses this packet to receive data
-            DatagramPacket receivedPacket = new DatagramPacket(incomingData, incomingData.length);
             serverSocket.receive(receivedPacket);
 
             //Converts datagram data to string and displays it
@@ -48,37 +44,22 @@ public class Server {
                 packetList = handler.toPacketList(fileData, ip, port);
                 System.out.println(packetList.size());
 
-                //Thread listenerThread = new Thread(new Listener());
-
                 for (DatagramPacket packet: packetList) {
-                    TimeUnit.MICROSECONDS.sleep(1);
-                    serverSocket.send(packet);
+                    ack = false;
 
-                    //if (!listenerThread.isAlive()) {
-                    //    listenerThread.start();
-                    //}
-                }
+                    while (!ack) {
+                        try {
+                            serverSocket.send(packet);
+                            serverSocket.receive(receivedPacket);
 
-                break;
-            }
-        }
-    }
+                            if (handler.getSequenceNumber(receivedPacket) == handler.getSequenceNumber(packet)) {
+                                ack = true;
+                            }
+                        } catch (SocketTimeoutException e) {
+                            System.out.println("Resending " + handler.getSequenceNumber(packet));
+                        }
 
-
-    class Listener implements Runnable {
-
-        @Override
-        public void run() {
-            byte[] incomingData = new byte[handler.PACKET_SIZE];
-            DatagramPacket packet = new DatagramPacket(incomingData, incomingData.length);
-
-            while (!serverSocket.isClosed()) {
-                try {
-                    serverSocket.receive(packet);
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    }
                 }
             }
         }

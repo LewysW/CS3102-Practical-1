@@ -66,7 +66,7 @@ public class Client {
             }
         }
 
-        packetList = streamFile(sendPacket, receivedPacket);
+        packetList = streamFile(receivedPacket);
 
         //If filename argument has been provided, write stream audio to file.
         if (fileName != null) {
@@ -76,8 +76,6 @@ public class Client {
         System.out.println(handler.toByteArray(packetList).length);
         System.out.println(packetList.size());
 
-        //TODO - enable writing to file if argument is provided (may have to preserve data from PriorityQueue)
-
         clientSocket.close();
     }
 
@@ -86,12 +84,13 @@ public class Client {
      * @return - list of packets that make up file
      * @throws IOException
      */
-    public ArrayList<DatagramPacket> streamFile(DatagramPacket sent, DatagramPacket received) throws Exception {
+    public ArrayList<DatagramPacket> streamFile(DatagramPacket received) throws Exception {
         PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<>(63556, new SequenceNumberComparator());
         ArrayList<DatagramPacket> packetList = new ArrayList<>();
         ArrayList<Integer> seqNums = new ArrayList<>();
         boolean buffered = false;
         ByteArrayInputStream byteArrayInputStream = null;
+        byte[] data = new byte[handler.SEQUENCE_SIZE];
 
         audioManager.start();
 
@@ -99,6 +98,7 @@ public class Client {
             try {
                 //Receives modified data from server and displays it
                 clientSocket.receive(received);
+                clientSocket.send(new DatagramPacket(handler.intToBytes(handler.getSequenceNumber(received)), handler.SEQUENCE_SIZE, ip, port));
                 byteArrayInputStream = new ByteArrayInputStream(received.getData());
 
                 //If the packet has not already been delivered (e.g. a retransmitted packet) then add packet to queue
@@ -110,7 +110,6 @@ public class Client {
                 //Initially fills up packet queue with packets to allow for some form of buffering
                 if (packetQueue.size() > BUFFERED_PACKET_NUM || buffered) {
                     packetList.add(packetQueue.peek());
-
                     audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
                     audioManager.playSound(handler.getPayload(packetQueue.remove()));
                     buffered = true;
