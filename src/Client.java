@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class Client {
     //TODO - localise some variables
     private static final int TIMEOUT = 1000;
-    private static final int BUFFERED_PACKET_NUM = 50000;
+    private static final int BUFFERED_PACKET_NUM = 5000;
     private DatagramSocket clientSocket;
     private InetAddress ip;
     private int port;

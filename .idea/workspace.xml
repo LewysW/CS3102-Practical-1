@@ -2,7 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="164c4721-e4b3-4ee4-8f1c-55950de49bf6" name="Default Changelist" comment="Updated echo client/server to use UDP instead of TCP">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/AudioManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/AudioManager.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/DelayExperiment.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/DelayExperiment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/FileHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/FileHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/JitterExperiment.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/JitterExperiment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/LossExperiment.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/LossExperiment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/PacketHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/PacketHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/PacketReorderingExperiment.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/PacketReorderingExperiment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/SequenceNumberComparator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/SequenceNumberComparator.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/Server.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server.java" afterDir="false" />
@@ -16,13 +26,33 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/CS3102_Practical_1$Client.ic" NAME="Client Coverage Results" MODIFIED="1550344516302" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="1913632908">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.21" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="java" value="315" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JAVA" value="315" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-15">
-              <caret line="74" selection-start-line="74" selection-end-line="74" />
+            <state relative-caret-position="180">
+              <caret line="12" column="61" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -35,29 +65,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state>
               <caret column="31" selection-start-column="31" selection-end-column="31" />
-              <folding>
-                <element signature="e#342#343#0" expanded="true" />
-                <element signature="e#371#372#0" expanded="true" />
-                <element signature="e#423#424#0" expanded="true" />
-                <element signature="e#459#460#0" expanded="true" />
-                <element signature="e#488#489#0" expanded="true" />
-                <element signature="e#515#516#0" expanded="true" />
-                <element signature="e#553#554#0" expanded="true" />
-                <element signature="e#585#586#0" expanded="true" />
-                <element signature="e#617#618#0" expanded="true" />
-                <element signature="e#645#646#0" expanded="true" />
-                <element signature="e#688#689#0" expanded="true" />
-                <element signature="e#722#723#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="99" column="84" selection-start-line="99" selection-start-column="84" selection-end-line="99" selection-end-column="84" />
+            <state relative-caret-position="360">
+              <caret line="51" column="47" selection-start-line="51" selection-start-column="47" selection-end-line="51" selection-end-column="47" />
             </state>
           </provider>
         </entry>
@@ -74,7 +90,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FileHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
+            <state relative-caret-position="1170">
               <caret line="92" column="5" selection-start-line="92" selection-start-column="5" selection-end-line="92" selection-end-column="5" />
             </state>
           </provider>
@@ -119,8 +135,8 @@
         <option value="$PROJECT_DIR$/src/SequenceNumberComparator.java" />
         <option value="$PROJECT_DIR$/src/FileHandler.java" />
         <option value="$PROJECT_DIR$/src/PacketHandler.java" />
-        <option value="$PROJECT_DIR$/src/Server.java" />
         <option value="$PROJECT_DIR$/src/Client.java" />
+        <option value="$PROJECT_DIR$/src/Server.java" />
       </list>
     </option>
   </component>
@@ -164,7 +180,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550594669388" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550612709247" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -221,6 +237,7 @@
       <option name="presentableId" value="Default" />
       <updated>1549109377726</updated>
       <workItem from="1549975650010" duration="2858000" />
+      <workItem from="1550611610233" duration="1099000" />
     </task>
     <task id="LOCAL-00001" summary="Updated echo client/server to use UDP instead of TCP">
       <created>1549112613451</created>
@@ -240,13 +257,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2858000" />
+    <option name="totallyTimeSpent" value="3957000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="27" width="1920" height="1020" extended-state="6" />
+    <frame x="-1" y="0" width="2050" height="1125" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.30149412" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3046953" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -255,7 +272,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3295583" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27066818" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2704591" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997735" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -308,6 +325,9 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated echo client/server to use UDP instead of TCP" />
     <option name="LAST_COMMIT_MESSAGE" value="Updated echo client/server to use UDP instead of TCP" />
@@ -348,6 +368,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/FileHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1170">
+          <caret line="92" column="5" selection-start-line="92" selection-start-column="5" selection-end-line="92" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/SequenceNumberComparator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -362,44 +389,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="31" selection-start-column="31" selection-end-column="31" />
-          <folding>
-            <element signature="e#342#343#0" expanded="true" />
-            <element signature="e#371#372#0" expanded="true" />
-            <element signature="e#423#424#0" expanded="true" />
-            <element signature="e#459#460#0" expanded="true" />
-            <element signature="e#488#489#0" expanded="true" />
-            <element signature="e#515#516#0" expanded="true" />
-            <element signature="e#553#554#0" expanded="true" />
-            <element signature="e#585#586#0" expanded="true" />
-            <element signature="e#617#618#0" expanded="true" />
-            <element signature="e#645#646#0" expanded="true" />
-            <element signature="e#688#689#0" expanded="true" />
-            <element signature="e#722#723#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FileHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="92" column="5" selection-start-line="92" selection-start-column="5" selection-end-line="92" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-15">
-          <caret line="74" selection-start-line="74" selection-end-line="74" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="51" column="47" selection-start-line="51" selection-start-column="47" selection-end-line="51" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="99" column="84" selection-start-line="99" selection-start-column="84" selection-end-line="99" selection-end-column="84" />
+          <caret line="12" column="61" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

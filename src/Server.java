@@ -1,6 +1,7 @@
 import javax.xml.crypto.Data;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Timer;
 
@@ -9,7 +10,7 @@ public class Server {
     private FileHandler handler;
     private ArrayList<DatagramPacket> packetList = new ArrayList<>();
     private byte[] fileData;
-    //Timeout is 100ms
+    //Timeout is 100ms TODO - dynamically assign timeout time
     private static final int ACK_TIMEOUT = 100;
     //Size of selective resend buffer in number of packets
     private static final int SR_BUFFER_SIZE = 60;
@@ -31,7 +32,6 @@ public class Server {
         byte[] outgoing = new byte[handler.PACKET_SIZE];
 
         DatagramPacket receivedPacket = new DatagramPacket(incomingData, incomingData.length);
-        boolean ack;
 
         //Loops and listens for incoming connections
         while (true) {
@@ -62,7 +62,6 @@ public class Server {
                 long start = System.currentTimeMillis();
                 long elapsed;
 
-                //TODO - put into selectiveResend() function
                 //Iterates through packets while SR buffer has not reached end of packet list
                 while (N < packetList.size() || !srBuffer.isEmpty()) {
                     //Shifts the boundaries of the SR (Selective Resend) buffer if the first packet has been acknowledged
@@ -103,27 +102,6 @@ public class Server {
                 }
 
                 System.out.println("TRANSMISSION FINISHED");
-
-                //TODO - put into separate stopAndWait() function
-                /*
-                for (DatagramPacket packet: packetList) {
-                    ack = false;
-
-                    while (!ack) {
-                        try {
-                            serverSocket.send(packet);
-                            serverSocket.receive(receivedPacket);
-
-                            if (handler.getSequenceNumber(receivedPacket) == handler.getSequenceNumber(packet)) {
-                                ack = true;
-                            }
-                        } catch (SocketTimeoutException e) {
-                            System.out.println("Resending " + handler.getSequenceNumber(packet));
-                        }
-
-                    }
-                }
-                */
             }
         }
     }
