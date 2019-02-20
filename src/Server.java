@@ -1,17 +1,13 @@
-import javax.xml.crypto.Data;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Timer;
 
 public class Server {
     private DatagramSocket serverSocket;
     private FileHandler handler;
-    private ArrayList<DatagramPacket> packetList = new ArrayList<>();
     private byte[] fileData;
     //Timeout is 100ms TODO - dynamically assign timeout time
-    private static final int ACK_TIMEOUT = 100;
+    private static long ACK_TIMEOUT = 1000;
     //Size of selective resend buffer in number of packets
     private static final int SR_BUFFER_SIZE = 60;
 
@@ -27,6 +23,9 @@ public class Server {
     }
 
     private void run() throws Exception {
+        //Stores the packets in preparation for transmission
+        ArrayList<DatagramPacket> packetList;
+
         //Creates server socket, client socket, and output and input objects
         byte[] incomingData = new byte[handler.PACKET_SIZE];
         byte[] outgoing = new byte[handler.PACKET_SIZE];
@@ -96,6 +95,8 @@ public class Server {
                     for (PacketHandler packetHandler: srBuffer) {
                         if (handler.getSequenceNumber(packetHandler.getPacket()) == handler.getSequenceNumber(receivedPacket)) {
                             packetHandler.setAcked(true);
+                            ACK_TIMEOUT = 2 * (new Date().getTime() - packetHandler.getTime() - start);
+                            System.out.println(ACK_TIMEOUT);
                             break;
                         }
                     }

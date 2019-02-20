@@ -1,24 +1,17 @@
 import javax.sound.sampled.*;
-import javax.xml.crypto.Data;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.PriorityQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class Client {
     //TODO - localise some variables
     private static final int TIMEOUT = 1000;
-    private static final int BUFFERED_PACKET_NUM = 5000;
+    private static final int BUFFERED_PACKET_NUM = 10000;
     private DatagramSocket clientSocket;
     private InetAddress ip;
     private int port;
@@ -97,7 +90,6 @@ public class Client {
             try {
                 //Receives modified data from server and displays it
                 clientSocket.receive(received);
-                System.out.println("RECEIVED: " + handler.getSequenceNumber(received));
                 clientSocket.send(new DatagramPacket(handler.intToBytes(handler.getSequenceNumber(received)), handler.SEQUENCE_SIZE, ip, port));
                 byteArrayInputStream = new ByteArrayInputStream(received.getData());
 
@@ -107,8 +99,8 @@ public class Client {
                     seqNums.add(handler.getSequenceNumber(received));
                 }
 
-                //Initially fills up packet queue with packets to allow for some form of buffering
-                if (packetQueue.size() > BUFFERED_PACKET_NUM || buffered) {
+                //If the queue has been buffered with enough packets then begin playing audio
+                if (packetQueue.size() > BUFFERED_PACKET_NUM || (buffered && !packetQueue.isEmpty())) {
                     packetList.add(packetQueue.peek());
                     audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
                     audioManager.playSound(handler.getPayload(packetQueue.remove()));
