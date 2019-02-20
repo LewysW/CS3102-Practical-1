@@ -127,6 +127,13 @@ public class Client {
         return packetList;
     }
 
+    class Player implements Runnable {
+        @Override
+        public void run() {
+            
+        }
+    }
+
     public static void main(String[] args) {
         if (args.length == 2 || args.length == 3) {
             Client client;

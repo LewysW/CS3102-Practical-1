@@ -1,15 +1,19 @@
+import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class Server {
     private DatagramSocket serverSocket;
     private FileHandler handler;
     private byte[] fileData;
     //Timeout is 100ms TODO - dynamically assign timeout time
-    private static long ACK_TIMEOUT = 1000;
+    private static double ACK_TIMEOUT = 1000;
     //Size of selective resend buffer in number of packets
-    private static final int SR_BUFFER_SIZE = 60;
+    //private static final int SR_BUFFER_SIZE = 60;
+    private static final int SR_BUFFER_SIZE = 300;
 
 
     /**
@@ -95,11 +99,13 @@ public class Server {
                     for (PacketHandler packetHandler: srBuffer) {
                         if (handler.getSequenceNumber(packetHandler.getPacket()) == handler.getSequenceNumber(receivedPacket)) {
                             packetHandler.setAcked(true);
-                            ACK_TIMEOUT = 2 * (new Date().getTime() - packetHandler.getTime() - start);
+                            ACK_TIMEOUT = 1.025 * (new Date().getTime() - packetHandler.getTime() - start);
                             System.out.println(ACK_TIMEOUT);
                             break;
                         }
                     }
+
+
                 }
 
                 System.out.println("TRANSMISSION FINISHED");
