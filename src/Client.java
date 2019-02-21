@@ -13,8 +13,8 @@ import java.util.PriorityQueue;
 
 public class Client {
     //TODO - localise some variables
-    private static final int TIMEOUT = 1000;
-    private static final int BUFFERED_PACKET_NUM = 10000;
+    private static final int TIMEOUT = 3000;
+    private static final int BUFFERED_PACKET_NUM = 5000;
     private DatagramSocket clientSocket;
     private InetAddress ip;
     private int port;
@@ -93,7 +93,7 @@ public class Client {
 
         try {
             while (true) {
-                System.out.println(packetQueue.size());
+                //System.out.println(packetQueue.size());
                 //If there are packets in the queue and the packet is the next in sequence, pass it to playback thread
                 if (packetQueue.size() > 0 && handler.getSequenceNumber(packetQueue.peek()) == BASE) {
                     packetList.add(packetQueue.remove());
@@ -117,6 +117,9 @@ public class Client {
                 }
             }
         } catch (SocketTimeoutException e) {
+            while (!packetQueue.isEmpty()) {
+                packetList.add(packetQueue.remove());
+            }
             e.printStackTrace();
         }
 
@@ -140,7 +143,7 @@ public class Client {
                 try {
                     //If the packet buffer is full
                     if (packets.size() > currentPacket && (packets.size() > BUFFERED_PACKET_NUM || buffered)) {
-                        System.out.println("PLAYING PACKET: " + currentPacket);
+                        //System.out.println("PLAYING PACKET: " + currentPacket);
                         audioManager.playSound(handler.getPayload(packets.get(currentPacket++)));
                         buffered = true;
                     }

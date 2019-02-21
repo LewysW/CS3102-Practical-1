@@ -14,7 +14,7 @@ public class Server {
     private static double ACK_TIMEOUT = 1000;
     //Size of selective resend buffer in number of packets
     //private static final int SR_BUFFER_SIZE = 60;
-    private static final int SR_BUFFER_SIZE = 2000;
+    private static final int SR_BUFFER_SIZE = 500;
 
 
     /**
