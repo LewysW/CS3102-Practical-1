@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Server {
     private DatagramSocket serverSocket;
@@ -13,7 +14,7 @@ public class Server {
     private static double ACK_TIMEOUT = 1000;
     //Size of selective resend buffer in number of packets
     //private static final int SR_BUFFER_SIZE = 60;
-    private static final int SR_BUFFER_SIZE = 300;
+    private static final int SR_BUFFER_SIZE = 2000;
 
 
     /**
@@ -99,8 +100,8 @@ public class Server {
                     for (PacketHandler packetHandler: srBuffer) {
                         if (handler.getSequenceNumber(packetHandler.getPacket()) == handler.getSequenceNumber(receivedPacket)) {
                             packetHandler.setAcked(true);
-                            ACK_TIMEOUT = 1.025 * (new Date().getTime() - packetHandler.getTime() - start);
-                            System.out.println(ACK_TIMEOUT);
+                            ACK_TIMEOUT = 1.01 * (new Date().getTime() - packetHandler.getTime() - start);
+                            //System.out.println(ACK_TIMEOUT);
                             break;
                         }
                     }

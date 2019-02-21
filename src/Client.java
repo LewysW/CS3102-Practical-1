@@ -1,4 +1,5 @@
 import javax.sound.sampled.*;
+import javax.xml.crypto.Data;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -6,6 +7,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class Client {
@@ -43,7 +46,7 @@ public class Client {
     private void run() throws Exception {
         byte[] receiveData = new byte[handler.PACKET_SIZE];
         byte[] sendData = ("MARCO").getBytes();
-        ArrayList<DatagramPacket> packetList;
+        List<DatagramPacket> packetList;
 
         //Sends the initial stage of the 'handshake' 'MARCO'
         DatagramPacket receivedPacket = new DatagramPacket(receiveData, receiveData.length);
@@ -77,49 +80,44 @@ public class Client {
      * @return - list of packets that make up file
      * @throws IOException
      */
-    public ArrayList<DatagramPacket> streamFile(DatagramPacket received) throws Exception {
+    public List<DatagramPacket> streamFile(DatagramPacket received) throws Exception {
         PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<>(63556, new SequenceNumberComparator());
-        ArrayList<DatagramPacket> packetList = new ArrayList<>();
-        ArrayList<Integer> seqNums = new ArrayList<>();
-        boolean buffered = false;
+        List<DatagramPacket> packetList = Collections.synchronizedList(new ArrayList<>());
+        ArrayList<Integer> sequenceNumbers = new ArrayList<>();
         ByteArrayInputStream byteArrayInputStream = null;
 
         audioManager.start();
+        Thread thread = new Thread(new Player(packetList));
+        thread.start();
+        int BASE = 0;
 
-        while (true) {
-            try {
-                //Receives modified data from server and displays it
+        try {
+            while (true) {
+                System.out.println(packetQueue.size());
+                //If there are packets in the queue and the packet is the next in sequence, pass it to playback thread
+                if (packetQueue.size() > 0 && handler.getSequenceNumber(packetQueue.peek()) == BASE) {
+                    packetList.add(packetQueue.remove());
+                    BASE++;
+                    continue;
+                }
+
+                //Receives a packet and sends an ack response to server
                 clientSocket.receive(received);
                 clientSocket.send(new DatagramPacket(handler.intToBytes(handler.getSequenceNumber(received)), handler.SEQUENCE_SIZE, ip, port));
-                byteArrayInputStream = new ByteArrayInputStream(received.getData());
 
-                //If the packet has not already been delivered (e.g. a retransmitted packet) then add packet to queue
-                if (!seqNums.contains(handler.getSequenceNumber(received))) {
+                //If the packet has not yet been received, add it to the packet priority queue
+                if (!sequenceNumbers.contains(handler.getSequenceNumber(received))) {
                     packetQueue.add(new DatagramPacket(received.getData().clone(), received.getLength()));
-                    seqNums.add(handler.getSequenceNumber(received));
+                    sequenceNumbers.add(handler.getSequenceNumber(received));
                 }
 
-                //If the queue has been buffered with enough packets then begin playing audio
-                if (packetQueue.size() > BUFFERED_PACKET_NUM || (buffered && !packetQueue.isEmpty())) {
-                    packetList.add(packetQueue.peek());
+                //If packet received is the first packet, set AudioInputStream
+                if (BASE == 0) {
                     audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
-                    audioManager.playSound(handler.getPayload(packetQueue.remove()));
-                    buffered = true;
                 }
-            } catch (SocketTimeoutException e) {
-                //If server has finished receiving packets, play out remaining packets if they exist
-                if (packetQueue.size() > 0) {
-                    while (!packetQueue.isEmpty()) {
-                        packetList.add(packetQueue.peek());
-                        audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
-                        audioManager.playSound(handler.getPayload(packetQueue.remove()));
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-
-                break;
             }
+        } catch (SocketTimeoutException e) {
+            e.printStackTrace();
         }
 
         audioManager.end();
@@ -128,9 +126,28 @@ public class Client {
     }
 
     class Player implements Runnable {
+        List<DatagramPacket> packets;
+        int currentPacket = 0;
+        boolean buffered = false;
+
+        public Player(List<DatagramPacket> packets) {
+            this.packets = packets;
+        }
+
         @Override
         public void run() {
-            
+            while (true) {
+                try {
+                    //If the packet buffer is full
+                    if (packets.size() > currentPacket && (packets.size() > BUFFERED_PACKET_NUM || buffered)) {
+                        System.out.println("PLAYING PACKET: " + currentPacket);
+                        audioManager.playSound(handler.getPayload(packets.get(currentPacket++)));
+                        buffered = true;
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("No packets left to play!");
+                }
+            }
         }
     }
 

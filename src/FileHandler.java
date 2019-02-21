@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import static java.util.Arrays.copyOfRange;
@@ -104,7 +105,7 @@ public class FileHandler {
         return fileData;
     }
 
-    public byte[] toByteArray(ArrayList<DatagramPacket> packets) {
+    public byte[] toByteArray(List<DatagramPacket> packets) {
         byte[] fileData = new byte[packets.size() * PACKET_SIZE];
         int index = 0;
 
