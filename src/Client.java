@@ -14,13 +14,14 @@ import java.util.PriorityQueue;
 public class Client {
     //TODO - localise some variables
     private static final int TIMEOUT = 3000;
-    private static final int BUFFERED_PACKET_NUM = 5000;
+    private static final int BUFFERED_PACKET_NUM = 10000;
     private DatagramSocket clientSocket;
     private InetAddress ip;
     private int port;
     private String fileName = null;
     private FileHandler handler;
     private AudioManager audioManager;
+    private boolean isTransmitted = false;
     /**
      Used the sample client-server UDP code from Computer Networking: A Top Down Approach, by Kurose and Ross
      */
@@ -117,14 +118,16 @@ public class Client {
                 }
             }
         } catch (SocketTimeoutException e) {
+            System.out.println("TRANMISSION FINISHED");
+
             while (!packetQueue.isEmpty()) {
                 packetList.add(packetQueue.remove());
             }
-            e.printStackTrace();
+            isTransmitted = true;
         }
 
+        thread.join();
         audioManager.end();
-
         return packetList;
     }
 
@@ -142,10 +145,13 @@ public class Client {
             while (true) {
                 try {
                     //If the packet buffer is full
+                    System.out.println("packets.size(): " + packets.size() + " Current Packet: " + currentPacket);
                     if (packets.size() > currentPacket && (packets.size() > BUFFERED_PACKET_NUM || buffered)) {
-                        //System.out.println("PLAYING PACKET: " + currentPacket);
+                        System.out.println("PLAYING PACKET: " + currentPacket);
                         audioManager.playSound(handler.getPayload(packets.get(currentPacket++)));
                         buffered = true;
+                    } else if (isTransmitted && packets.size() == currentPacket) {
+                        System.exit(0);
                     }
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("No packets left to play!");

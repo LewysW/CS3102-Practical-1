@@ -14,7 +14,9 @@ public class Server {
     private static double ACK_TIMEOUT = 1000;
     //Size of selective resend buffer in number of packets
     //private static final int SR_BUFFER_SIZE = 60;
-    private static final int SR_BUFFER_SIZE = 500;
+    private static final int SR_BUFFER_SIZE = 2000;
+    private  static final int BUFFER_DELAY_FACTOR = 13;
+    private static final int TEST_PACKET_NUM = 100;
 
 
     /**
@@ -57,14 +59,16 @@ public class Server {
                 System.out.println(packetList.size());
 
                 ArrayList<PacketHandler> srBuffer = new ArrayList<>();
-                int BASE = 0;
-                int N = SR_BUFFER_SIZE;
+                long start = System.currentTimeMillis();
+                long elapsed;
 
+                int BASE = TEST_PACKET_NUM;
+                int N = TEST_PACKET_NUM + calcBufferSize(packetList, receivedPacket, TEST_PACKET_NUM, start);
+
+                System.out.println("BASE: " + BASE + " N: " + N);
 
                 for (int i = 0; i < N; i++) srBuffer.add(new PacketHandler(packetList.get(i)));
 
-                long start = System.currentTimeMillis();
-                long elapsed;
 
                 //Iterates through packets while SR buffer has not reached end of packet list
                 while (N < packetList.size() || !srBuffer.isEmpty()) {
@@ -100,18 +104,50 @@ public class Server {
                     for (PacketHandler packetHandler: srBuffer) {
                         if (handler.getSequenceNumber(packetHandler.getPacket()) == handler.getSequenceNumber(receivedPacket)) {
                             packetHandler.setAcked(true);
-                            ACK_TIMEOUT = 1.01 * (new Date().getTime() - packetHandler.getTime() - start);
+                            ACK_TIMEOUT = 1.02 * (new Date().getTime() - packetHandler.getTime() - start);
                             //System.out.println(ACK_TIMEOUT);
                             break;
                         }
                     }
-
 
                 }
 
                 System.out.println("TRANSMISSION FINISHED");
             }
         }
+    }
+
+    /**
+     * Uses the average delay of packet acknowledgements to determine the optimal SR buffer size
+     * @param packets - packets to send to user
+     * @param n - number of packets to send to determine optimal buffer size
+     * @return
+     */
+    public int calcBufferSize(ArrayList<DatagramPacket> packets, DatagramPacket received, int n, long start) {
+        ArrayList<PacketHandler> meta_data = new ArrayList<>();
+        PacketHandler packetHandler;
+        long delay = 0;
+        long averageDelay = 0;
+
+        for (int i = 0; i < n; i++) {
+            packetHandler = new PacketHandler(packets.get(i));
+            packetHandler.setTime(new Date().getTime() - start);
+            meta_data.add(packetHandler);
+
+            try {
+                serverSocket.send(packetHandler.getPacket());
+                serverSocket.receive(received);
+                delay = (new Date().getTime() - packetHandler.getTime() - start);
+                averageDelay = averageDelay + delay;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        averageDelay /= n;
+
+        return (int) (averageDelay * BUFFER_DELAY_FACTOR);
+
     }
 
     public static void main(String[] args) {
