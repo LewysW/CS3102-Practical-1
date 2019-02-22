@@ -1,10 +1,6 @@
-import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Server {
     private DatagramSocket serverSocket;
@@ -13,10 +9,9 @@ public class Server {
     //Timeout is 100ms TODO - dynamically assign timeout time
     private static double ACK_TIMEOUT = 1000;
     //Size of selective resend buffer in number of packets
-    //private static final int SR_BUFFER_SIZE = 60;
-    private static final int SR_BUFFER_SIZE = 2000;
-    private  static final int BUFFER_DELAY_FACTOR = 13;
+    private  static final int BUFFER_DELAY_FACTOR = 10;
     private static final int TEST_PACKET_NUM = 100;
+    private static final int MAX_BUFFER_SIZE = 2500;
 
 
     /**
@@ -61,9 +56,10 @@ public class Server {
                 ArrayList<PacketHandler> srBuffer = new ArrayList<>();
                 long start = System.currentTimeMillis();
                 long elapsed;
+                long avgDelay = 0;
 
-                int BASE = TEST_PACKET_NUM;
-                int N = TEST_PACKET_NUM + calcBufferSize(packetList, receivedPacket, TEST_PACKET_NUM, start);
+                int BASE = 0;
+                int N = TEST_PACKET_NUM;
 
                 System.out.println("BASE: " + BASE + " N: " + N);
 
@@ -72,6 +68,10 @@ public class Server {
 
                 //Iterates through packets while SR buffer has not reached end of packet list
                 while (N < packetList.size() || !srBuffer.isEmpty()) {
+                    if (BASE == TEST_PACKET_NUM) {
+                        N = resizeBuffer(srBuffer, packetList, N, calcBufferSize(avgDelay / TEST_PACKET_NUM));
+                    }
+
                     //Shifts the boundaries of the SR (Selective Resend) buffer if the first packet has been acknowledged
                     if (srBuffer.get(BASE % (N - BASE)).isAcked()) {
                         srBuffer.remove(BASE % (N - BASE));
@@ -105,7 +105,8 @@ public class Server {
                         if (handler.getSequenceNumber(packetHandler.getPacket()) == handler.getSequenceNumber(receivedPacket)) {
                             packetHandler.setAcked(true);
                             ACK_TIMEOUT = 1.02 * (new Date().getTime() - packetHandler.getTime() - start);
-                            //System.out.println(ACK_TIMEOUT);
+                            avgDelay += ACK_TIMEOUT;
+                            System.out.println(ACK_TIMEOUT + "ms");
                             break;
                         }
                     }
@@ -119,35 +120,32 @@ public class Server {
 
     /**
      * Uses the average delay of packet acknowledgements to determine the optimal SR buffer size
-     * @param packets - packets to send to user
-     * @param n - number of packets to send to determine optimal buffer size
+     * @param averageDelay - used to calculate new buffer size
      * @return
      */
-    public int calcBufferSize(ArrayList<DatagramPacket> packets, DatagramPacket received, int n, long start) {
-        ArrayList<PacketHandler> meta_data = new ArrayList<>();
-        PacketHandler packetHandler;
-        long delay = 0;
-        long averageDelay = 0;
-
-        for (int i = 0; i < n; i++) {
-            packetHandler = new PacketHandler(packets.get(i));
-            packetHandler.setTime(new Date().getTime() - start);
-            meta_data.add(packetHandler);
-
-            try {
-                serverSocket.send(packetHandler.getPacket());
-                serverSocket.receive(received);
-                delay = (new Date().getTime() - packetHandler.getTime() - start);
-                averageDelay = averageDelay + delay;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public int calcBufferSize(long averageDelay) {
+        if (TEST_PACKET_NUM + (averageDelay * BUFFER_DELAY_FACTOR) > MAX_BUFFER_SIZE) {
+            return MAX_BUFFER_SIZE;
         }
 
-        averageDelay /= n;
+        return (int) (TEST_PACKET_NUM + (averageDelay * BUFFER_DELAY_FACTOR));
+    }
 
-        return (int) (averageDelay * BUFFER_DELAY_FACTOR);
 
+    /**
+     * Resizes the buffer used to store and send packets
+     * @param srBuffer - buffer to resize
+     * @param packets - packets to add to end of buffer
+     * @param N - upper packet contained in buffer
+     * @param newUpperLimit - new upper limit of N
+     * @return - returns the number of the new uppermost packet of the buffer
+     */
+    public int resizeBuffer(ArrayList<PacketHandler> srBuffer, ArrayList<DatagramPacket> packets, int N, int newUpperLimit) {
+        while (N != newUpperLimit) {
+            srBuffer.add(new PacketHandler(packets.get(N++)));
+        }
+
+        return N;
     }
 
     public static void main(String[] args) {

@@ -13,8 +13,8 @@ import java.util.PriorityQueue;
 
 public class Client {
     //TODO - localise some variables
-    private static final int TIMEOUT = 3000;
-    private static final int BUFFERED_PACKET_NUM = 10000;
+    private static final int TIMEOUT = 10000;
+    private static final int BUFFERED_PACKET_NUM = 1000;
     private DatagramSocket clientSocket;
     private InetAddress ip;
     private int port;
