@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="164c4721-e4b3-4ee4-8f1c-55950de49bf6" name="Default Changelist" comment="Updated echo client/server to use UDP instead of TCP">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/Client$Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/Client$Player.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/Server.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client$Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client$Player.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server.class" afterDir="false" />
-    </list>
+    <list default="true" id="164c4721-e4b3-4ee4-8f1c-55950de49bf6" name="Default Changelist" comment="Updated echo client/server to use UDP instead of TCP" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +174,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550861238315" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550862090379" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
