@@ -4,14 +4,21 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Server {
+    //Interface to sends packets to client
     private DatagramSocket serverSocket;
+    //Handler to convert been files and bytes
     private FileHandler handler;
+    //Array to store raw audio data
     private byte[] fileData;
+    //Default timeout period for a transmitted packet
     private static double ACK_TIMEOUT = 1000;
-    //Size of selective repeat buffer in number of packets
+    //Multiple to determine size of SR buffer (determined by multiplying this by average delay)
     private  static final int BUFFER_DELAY_FACTOR = 10;
-    private static final int TEST_PACKET_NUM = 100;
+    //Initial buffer size
+    private static final int INITIAL_BUFFER_SIZE = 100;
+    //Maximum possible buffer size
     private static final int MAX_BUFFER_SIZE = 2500;
+    //Constant to mark packet as not sent
     private static final int PACKET_NOT_SENT = -1;
 
 
@@ -90,7 +97,7 @@ public class Server {
 
         //Sets the lower and upper boundaries of the SR buffer, upper boundary is initially a default value
         int BASE = 0;
-        int N = TEST_PACKET_NUM;
+        int N = INITIAL_BUFFER_SIZE;
 
         System.out.println("BASE: " + BASE + " N: " + N);
 
@@ -100,8 +107,8 @@ public class Server {
 
         //Iterates through packets while SR buffer has not reached end of packet list or there are still packets in the buffer
         while (N < packetList.size() || !srBuffer.isEmpty()) {
-            if (BASE == TEST_PACKET_NUM) {
-                N = resizeBuffer(srBuffer, packetList, N, calcBufferSize(totalDelay / TEST_PACKET_NUM));
+            if (BASE == INITIAL_BUFFER_SIZE) {
+                N = resizeBuffer(srBuffer, packetList, N, calcBufferSize(totalDelay / INITIAL_BUFFER_SIZE));
             }
 
             //Shifts the boundaries of the SR (Selective Repeat) buffer if the first packet has been acknowledged
@@ -185,11 +192,11 @@ public class Server {
      * @return - the new size of the SR buffer based on the delay, or the maximum buffer size if too large
      */
     public int calcBufferSize(long averageDelay) {
-        if (TEST_PACKET_NUM + (averageDelay * BUFFER_DELAY_FACTOR) > MAX_BUFFER_SIZE) {
+        if (INITIAL_BUFFER_SIZE + (averageDelay * BUFFER_DELAY_FACTOR) > MAX_BUFFER_SIZE) {
             return MAX_BUFFER_SIZE;
         }
 
-        return (int) (TEST_PACKET_NUM + (averageDelay * BUFFER_DELAY_FACTOR));
+        return (int) (INITIAL_BUFFER_SIZE + (averageDelay * BUFFER_DELAY_FACTOR));
     }
 
 

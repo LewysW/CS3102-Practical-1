@@ -12,38 +12,71 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class Client {
-    //TODO - localise some variables
+    //Time until client times out after waiting for server
     private static final int TIMEOUT = 10000;
+    //Number of packets to buffer before playing audio
     private static final int BUFFERED_PACKET_NUM = 2000;
+    //Initial size of priority queue
+    private static final int INITIAL_QUEUE_SIZE = 65536;
+    //Interface to receive packets through
     private DatagramSocket clientSocket;
+    //IP address
     private InetAddress ip;
+    //port number
     private int port;
+    //Name of file
     private String fileName = null;
+    //Handler for conversion from file to bytes
     private FileHandler handler;
+    //Audio interface class
     private AudioManager audioManager;
+    //Whether file has been transmitted
     private boolean isTransmitted = false;
+
+
     /**
      Used the sample client-server UDP code from Computer Networking: A Top Down Approach, by Kurose and Ross
      */
 
+
+    /**
+     * Constructor for client
+     * @param ip - host of server
+     * @param port - port server application is running on
+     * @throws Exception
+     */
     private Client(String ip, int port) throws Exception {
         //Creates UDP socket for client-server communication
         clientSocket = new DatagramSocket();
         clientSocket.setSoTimeout(TIMEOUT);
 
-        //Gets localhost as ip address
+        //Gets InetAddress from string ip
         this.ip = InetAddress.getByName(ip);
         this.port = port;
 
+        //Create file handler and audio manager instances
         handler = new FileHandler();
         audioManager = new AudioManager();
     }
 
+    /**
+     * Initialises file name if third argument is specified
+     * @param ip - host of server
+     * @param port - port of server application
+     * @param fileName - name of file to write data to
+     * @throws Exception
+     */
     private Client(String ip, int port, String fileName) throws Exception {
         this(ip, port);
         this.fileName = fileName;
     }
 
+    /**
+     * Runs the client which requests a file from the server,
+     * streams and plays it,
+     * and writes it to file
+     * @throws Exception
+     */
     private void run() throws Exception {
         byte[] receiveData = new byte[handler.PACKET_SIZE];
         byte[] sendData = ("MARCO").getBytes();
@@ -63,6 +96,7 @@ public class Client {
             }
         }
 
+        //Streams the audio file and plays it, finally storing it in a packet array list
         packetList = streamFile(receivedPacket);
 
         //If filename argument has been provided, write stream audio to file.
@@ -77,24 +111,30 @@ public class Client {
     }
 
     /**
-     * Requests that the server begin streaming the audio file
+     * Simultaneously streams and plays the audio file from the server
      * @return - list of packets that make up file
      * @throws IOException
      */
     public List<DatagramPacket> streamFile(DatagramPacket received) throws Exception {
-        PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<>(63556, new SequenceNumberComparator());
+        //Priority queue to reorder received packets from server
+        PriorityQueue<DatagramPacket> packetQueue = new PriorityQueue<>(INITIAL_QUEUE_SIZE, new SequenceNumberComparator());
+        //Synchronized packet array list for audio playback
         List<DatagramPacket> packetList = Collections.synchronizedList(new ArrayList<>());
+        //List to store the sequence numbers received thus far
         ArrayList<Integer> sequenceNumbers = new ArrayList<>();
+        //Input stream for playing audio
         ByteArrayInputStream byteArrayInputStream = null;
 
+        //Starts audio interface and playback thread
         audioManager.start();
         Thread thread = new Thread(new Player(packetList));
         thread.start();
+
+        //Keeps track of the end of the block of contiguously received packets
         int BASE = 0;
 
         try {
             while (true) {
-                //System.out.println(packetQueue.size());
                 //If there are packets in the queue and the packet is the next in sequence, pass it to playback thread
                 if (packetQueue.size() > 0 && handler.getSequenceNumber(packetQueue.peek()) == BASE) {
                     packetList.add(packetQueue.remove());
@@ -112,59 +152,87 @@ public class Client {
                     sequenceNumbers.add(handler.getSequenceNumber(received));
                 }
 
-                //If packet received is the first packet, set AudioInputStream
+                //If packet received is the first packet, use meta data from packet to initialise the audio input stream
                 if (BASE == 0) {
                     audioManager.setAudioInputStream(new AudioInputStream(byteArrayInputStream, audioManager.getFormat(), received.getLength()));
                 }
             }
+        //If sockets times out, assume end of transmission
         } catch (SocketTimeoutException e) {
             System.out.println("TRANMISSION FINISHED");
 
+            //Add remaining packets from priority queue to list for playback
             while (!packetQueue.isEmpty()) {
                 packetList.add(packetQueue.remove());
             }
+
+            /*
+            Finally, set isTransmitted to true, to indicate to playback
+            thread to end when out of packets to play
+             */
             isTransmitted = true;
         }
 
+        //Join thread, end audio interface and return the list of packets
         thread.join();
         audioManager.end();
         return packetList;
     }
 
+    /**
+     * Class which runs in a separate thread for audio playback
+     */
     class Player implements Runnable {
+        /*
+        Stores the list of packets, the current packet played, and whether
+        enough packets have been buffer to begin playback
+         */
         List<DatagramPacket> packets;
         int currentPacket = 0;
         boolean buffered = false;
 
+        //Initialises the list of packets to be played
         public Player(List<DatagramPacket> packets) {
             this.packets = packets;
         }
 
+        /**
+         * Function to play audio packet data
+         */
         @Override
         public void run() {
             while (true) {
                 try {
-                    //If the packet buffer is full
+
                     System.out.println("packets.size(): " + packets.size() + " Current Packet: " + currentPacket);
+
+                    //If there unplayed packets left in the packet list and the initial buffering period has occurred
                     if (packets.size() > currentPacket && (packets.size() > BUFFERED_PACKET_NUM || buffered)) {
                         System.out.println("PLAYING PACKET: " + currentPacket);
+
+                        //Play the packet
                         audioManager.playSound(handler.getPayload(packets.get(currentPacket++)));
+
+                        //Sets buffered to true after the initial buffering period has occurred
                         buffered = true;
+                    //If the file has been fully transmitted and the final packet has been played, thread exits
                     } else if (isTransmitted && packets.size() == currentPacket) {
                         System.exit(0);
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("No packets left to play!");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
 
     public static void main(String[] args) {
+        //Ensures that there are two or three args (host and port, or host, port and file to write to)
         if (args.length == 2 || args.length == 3) {
             Client client;
 
             try {
+                //Calls appropriate constructor based on number of args
                 if (args.length == 2) {
                     client = new Client(args[0], Integer.parseInt(args[1]));
                 } else {
