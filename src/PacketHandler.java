@@ -15,10 +15,6 @@ public class PacketHandler {
         return packet;
     }
 
-    public void setPacket(DatagramPacket packet) {
-        this.packet = packet;
-    }
-
     public long getTime() {
         return time;
     }

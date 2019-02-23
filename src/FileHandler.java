@@ -1,4 +1,3 @@
-import javax.xml.crypto.Data;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -12,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
-
-import static java.util.Arrays.copyOfRange;
 
 public class FileHandler {
     public static final int SIZE_OF_INT = 4;

@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="164c4721-e4b3-4ee4-8f1c-55950de49bf6" name="Default Changelist" comment="Updated echo client/server to use UDP instead of TCP" />
+    <list default="true" id="164c4721-e4b3-4ee4-8f1c-55950de49bf6" name="Default Changelist" comment="Updated echo client/server to use UDP instead of TCP">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/AudioManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Client$Player.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Client.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/DelayExperiment.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/FileHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/JitterExperiment.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/LossExperiment.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/PacketHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/PacketReorderingExperiment.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/SequenceNumberComparator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Server.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AudioManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AudioManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PacketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PacketHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SequenceNumberComparator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SequenceNumberComparator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -11,54 +29,12 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/CS3102_Practical_1$Client.ic" NAME="Client Coverage Results" MODIFIED="1550344516302" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="443497482">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="2" />
-          <entry key="project.open.time.7" value="3" />
-          <entry key="project.opened" value="3" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="java" value="3244" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="JAVA" value="3244" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Server.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="75" column="65" selection-start-line="75" selection-start-column="65" selection-end-line="75" selection-end-column="65" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/PacketHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="31" selection-start-column="31" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1483">
+            <state relative-caret-position="-1095">
               <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
             </state>
           </provider>
@@ -67,8 +43,14 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AudioManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="16" column="42" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="42" />
+            <state relative-caret-position="150">
+              <caret line="11" column="92" selection-start-line="11" selection-start-column="92" selection-end-line="11" selection-end-column="92" />
+              <folding>
+                <element signature="e#1904#1905#0" expanded="true" />
+                <element signature="e#1960#1961#0" expanded="true" />
+                <element signature="e#1998#1999#0" expanded="true" />
+                <element signature="e#2027#2028#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -82,11 +64,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/SequenceNumberComparator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="8" column="27" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
+            <state relative-caret-position="150">
+              <caret line="10" column="81" selection-start-line="10" selection-start-column="81" selection-end-line="10" selection-end-column="81" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -107,9 +89,10 @@
     <findStrings>
       <find>time</find>
       <find>packetQ</find>
-      <find>start</find>
       <find>exception</find>
       <find>Buffer size</find>
+      <find>selective</find>
+      <find>start</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -119,12 +102,12 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/Sound.java" />
-        <option value="$PROJECT_DIR$/src/AudioManager.java" />
-        <option value="$PROJECT_DIR$/src/SequenceNumberComparator.java" />
-        <option value="$PROJECT_DIR$/src/PacketHandler.java" />
         <option value="$PROJECT_DIR$/src/FileHandler.java" />
         <option value="$PROJECT_DIR$/src/Client.java" />
+        <option value="$PROJECT_DIR$/src/AudioManager.java" />
         <option value="$PROJECT_DIR$/src/Server.java" />
+        <option value="$PROJECT_DIR$/src/PacketHandler.java" />
+        <option value="$PROJECT_DIR$/src/SequenceNumberComparator.java" />
       </list>
     </option>
   </component>
@@ -145,7 +128,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -167,14 +151,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550862090379" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550862215332" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -257,7 +239,7 @@
     <frame x="0" y="27" width="1920" height="1020" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.32318377" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3271078" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -266,7 +248,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32915717" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.26765376" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.26765376" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997735" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -319,9 +301,6 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated echo client/server to use UDP instead of TCP" />
     <option name="LAST_COMMIT_MESSAGE" value="Updated echo client/server to use UDP instead of TCP" />
@@ -359,17 +338,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/PacketHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/AudioManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="31" selection-start-column="31" selection-end-column="31" />
+        <state relative-caret-position="150">
+          <caret line="11" column="92" selection-start-line="11" selection-start-column="92" selection-end-line="11" selection-end-column="92" />
+          <folding>
+            <element signature="e#1904#1905#0" expanded="true" />
+            <element signature="e#1960#1961#0" expanded="true" />
+            <element signature="e#1998#1999#0" expanded="true" />
+            <element signature="e#2027#2028#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AudioManager.java">
+    <entry file="file://$PROJECT_DIR$/src/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="16" column="42" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="42" />
+        <state relative-caret-position="-2306">
+          <caret line="23" column="95" selection-start-line="23" selection-start-column="95" selection-end-line="23" selection-end-column="95" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/PacketHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1095">
+          <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
         </state>
       </provider>
     </entry>
@@ -382,25 +381,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SequenceNumberComparator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="8" column="27" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1483">
-          <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="75" column="65" selection-start-line="75" selection-start-column="65" selection-end-line="75" selection-end-column="65" />
+        <state relative-caret-position="150">
+          <caret line="10" column="81" selection-start-line="10" selection-start-column="81" selection-end-line="10" selection-end-column="81" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
