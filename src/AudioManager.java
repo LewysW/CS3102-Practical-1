@@ -38,8 +38,7 @@ public class AudioManager {
      * @param soundData
      */
     public void playSound(byte[] soundData) {
-        try
-        {
+        try {
             sourceDataLine.write(soundData, 0, soundData.length);
         } catch (Exception e) {
             System.out.println("Not working in speakers...");

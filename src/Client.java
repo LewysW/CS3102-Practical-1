@@ -1,21 +1,17 @@
 import javax.sound.sampled.*;
-import javax.xml.crypto.Data;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Client {
     //Time until client times out after waiting for server
     private static final int TIMEOUT = 10000;
     //Number of packets to buffer before playing audio
-    private static final int BUFFERED_PACKET_NUM = 2000;
+    private static final int BUFFERED_PACKET_NUM = 1000;
     //Initial size of priority queue
     private static final int INITIAL_QUEUE_SIZE = 65536;
     //Interface to receive packets through
@@ -104,8 +100,8 @@ public class Client {
             handler.write("client.wav", handler.toByteArray(packetList));
         }
 
-        System.out.println(handler.toByteArray(packetList).length);
-        System.out.println(packetList.size());
+        System.out.println("SIZE OF RECEIVED DATA: " + handler.toByteArray(packetList).length);
+        System.out.println("TOTAL NUMBER OF PACKETS RECEIVED: " + packetList.size());
 
         clientSocket.close();
     }
@@ -159,7 +155,7 @@ public class Client {
             }
         //If sockets times out, assume end of transmission
         } catch (SocketTimeoutException e) {
-            System.out.println("TRANMISSION FINISHED");
+            System.out.println("TRANSMISSION FINISHED");
 
             //Add remaining packets from priority queue to list for playback
             while (!packetQueue.isEmpty()) {
@@ -203,13 +199,8 @@ public class Client {
         public void run() {
             while (true) {
                 try {
-
-                    System.out.println("packets.size(): " + packets.size() + " Current Packet: " + currentPacket);
-
                     //If there unplayed packets left in the packet list and the initial buffering period has occurred
                     if (packets.size() > currentPacket && (packets.size() > BUFFERED_PACKET_NUM || buffered)) {
-                        System.out.println("PLAYING PACKET: " + currentPacket);
-
                         //Play the packet
                         audioManager.playSound(handler.getPayload(packets.get(currentPacket++)));
 
@@ -217,7 +208,7 @@ public class Client {
                         buffered = true;
                     //If the file has been fully transmitted and the final packet has been played, thread exits
                     } else if (isTransmitted && packets.size() == currentPacket) {
-                        System.exit(0);
+                        break;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

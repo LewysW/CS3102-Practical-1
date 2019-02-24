@@ -53,8 +53,8 @@ public class Server {
         byte[] outgoing;
 
         DatagramPacket receivedPacket = new DatagramPacket(incomingData, incomingData.length);
-
-        //Loops and listens for incoming connections
+        serverSocket.setSoTimeout(0);
+        //Loops and listens for incoming segments
         while (true) {
             serverSocket.receive(receivedPacket);
 
@@ -72,7 +72,7 @@ public class Server {
                 serverSocket.send(new DatagramPacket(outgoing, outgoing.length, ip, port));
 
                 packetList = handler.toPacketList(fileData, ip, port);
-                System.out.println(packetList.size());
+                System.out.println("TOTAL NUMBER OF PACKETS TO TRANSMIT: "  + packetList.size());
 
                 srBufferStream(packetList, receivedPacket);
 
@@ -99,9 +99,7 @@ public class Server {
         int BASE = 0;
         int N = INITIAL_BUFFER_SIZE;
 
-        System.out.println("BASE: " + BASE + " N: " + N);
-
-        //Initilalises the SR buffer with the first N packets
+        //Initialises the SR buffer with the first N packets
         for (int i = 0; i < N; i++) srBuffer.add(new PacketHandler(packetList.get(i)));
 
 
@@ -123,8 +121,8 @@ public class Server {
                 continue;
             }
 
-            //Resends packets that have timed out
-            resendPackets(srBuffer, BASE, N, start);
+            //Sends packets that have not been sent, or resends packets that have timed out
+            sendPackets(srBuffer, BASE, N, start);
 
             //Receives ack packet
             serverSocket.receive(receivedPacket);
@@ -135,7 +133,7 @@ public class Server {
     }
 
     /**
-     * Resends packets which have not been acknowledged
+     * Sends packets which have not been acknowledged or have not yet been sent
      * within a specified timeout period
      * @param srBuffer - buffer of packets to send
      * @param BASE - lower bound packet in buffer
@@ -143,7 +141,7 @@ public class Server {
      * @param start - time since the start of transmission
      * @throws IOException
      */
-    public void resendPackets(ArrayList<PacketHandler> srBuffer, int BASE, int N, long start) throws IOException {
+    public void sendPackets(ArrayList<PacketHandler> srBuffer, int BASE, int N, long start) throws IOException {
         long elapsed;
 
         //Iterates over the SR buffer and works out whether the resend the packets
@@ -169,7 +167,6 @@ public class Server {
      */
     public long acknowledgePackets(ArrayList<PacketHandler> srBuffer, DatagramPacket receivedPacket, long start) {
         long delay = 0;
-
         //If the sequence number of the ack packet matches one of the packets in the buffer, mark as acknowledged
         for (PacketHandler packetHandler: srBuffer) {
             if (handler.getSequenceNumber(packetHandler.getPacket()) == handler.getSequenceNumber(receivedPacket)) {
