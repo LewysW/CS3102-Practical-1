@@ -15,7 +15,7 @@ public class Server {
     //Multiple to determine size of SR buffer (determined by multiplying this by average delay)
     private  static final int BUFFER_DELAY_FACTOR = 10;
     //Initial buffer size
-    private static final int INITIAL_BUFFER_SIZE = 50;
+    private static final int INITIAL_BUFFER_SIZE = 100;
     //Maximum possible buffer size
     private static final int MAX_BUFFER_SIZE = 2500;
     //Constant to mark packet as not sent
