@@ -15,7 +15,7 @@ public class Server {
     //Multiple to determine size of SR buffer (determined by multiplying this by average delay)
     private  static final int BUFFER_DELAY_FACTOR = 10;
     //Initial buffer size
-    private static final int INITIAL_BUFFER_SIZE = 100;
+    private static final int INITIAL_BUFFER_SIZE = 50;
     //Maximum possible buffer size
     private static final int MAX_BUFFER_SIZE = 2500;
     //Constant to mark packet as not sent
@@ -167,13 +167,16 @@ public class Server {
      */
     public long acknowledgePackets(ArrayList<PacketHandler> srBuffer, DatagramPacket receivedPacket, long start) {
         long delay = 0;
+        long sampleRTT;
+        double alpha = 0.125;
         //If the sequence number of the ack packet matches one of the packets in the buffer, mark as acknowledged
         for (PacketHandler packetHandler: srBuffer) {
             if (handler.getSequenceNumber(packetHandler.getPacket()) == handler.getSequenceNumber(receivedPacket)) {
                 packetHandler.setAcked(true);
 
                 //Adjusts timeout time of packets in real time as the delay changes
-                ACK_TIMEOUT = 1.02 * (new Date().getTime() - packetHandler.getTime() - start);
+                sampleRTT = (new Date().getTime() - packetHandler.getTime() - start);
+                ACK_TIMEOUT = (1 - alpha) * ACK_TIMEOUT + (alpha) * sampleRTT;
                 delay += ACK_TIMEOUT;
                 System.out.println(ACK_TIMEOUT + "ms");
                 break;
@@ -191,6 +194,8 @@ public class Server {
     public int calcBufferSize(long averageDelay) {
         if (INITIAL_BUFFER_SIZE + (averageDelay * BUFFER_DELAY_FACTOR) > MAX_BUFFER_SIZE) {
             return MAX_BUFFER_SIZE;
+        } else if (((averageDelay * BUFFER_DELAY_FACTOR) < INITIAL_BUFFER_SIZE)) {
+            return INITIAL_BUFFER_SIZE;
         }
 
         return (int) (INITIAL_BUFFER_SIZE + (averageDelay * BUFFER_DELAY_FACTOR));
