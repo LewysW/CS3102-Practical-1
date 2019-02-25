@@ -53,14 +53,14 @@ public class Server {
         byte[] outgoing;
 
         DatagramPacket receivedPacket = new DatagramPacket(incomingData, incomingData.length);
-        serverSocket.setSoTimeout(0);
+        //serverSocket.setSoTimeout(0);
         //Loops and listens for incoming segments
         while (true) {
             serverSocket.receive(receivedPacket);
 
             //Converts datagram data to string and displays it
             String message = new String(receivedPacket.getData());
-            System.out.println("MESSAGE: " + message);
+            //System.out.println("MESSAGE: " + message);
 
             //Gets ip address and port of sender, and data to send back
             InetAddress ip = receivedPacket.getAddress();

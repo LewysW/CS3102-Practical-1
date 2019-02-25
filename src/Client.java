@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Client {
     //Time until client times out after waiting for server
-    private static final int TIMEOUT = 10000;
+    private static final int TIMEOUT = 5000;
     //Number of packets to buffer before playing audio
     private static final int BUFFERED_PACKET_NUM = 1000;
     //Initial size of priority queue
@@ -121,6 +121,8 @@ public class Client {
         //Input stream for playing audio
         ByteArrayInputStream byteArrayInputStream = null;
 
+        double startTime = System.nanoTime();
+
         //Starts audio interface and playback thread
         audioManager.start();
         Thread thread = new Thread(new Player(packetList));
@@ -172,6 +174,9 @@ public class Client {
         //Join thread, end audio interface and return the list of packets
         thread.join();
         audioManager.end();
+
+        System.out.println("Stream duration: " + (System.nanoTime() - startTime) / 1000000000.0 + "s");
+
         return packetList;
     }
 
@@ -201,6 +206,7 @@ public class Client {
                 try {
                     //If there unplayed packets left in the packet list and the initial buffering period has occurred
                     if (packets.size() > currentPacket && (packets.size() > BUFFERED_PACKET_NUM || buffered)) {
+                        System.out.println("Playing packet: " + currentPacket + "/" + packets.size());
                         //Play the packet
                         audioManager.playSound(handler.getPayload(packets.get(currentPacket++)));
 
