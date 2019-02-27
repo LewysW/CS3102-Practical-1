@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Client {
     //Time until client times out after waiting for server
-    private static final int TIMEOUT = 5000;
+    private static final int TIMEOUT = 10000;
     //Number of packets to buffer before playing audio
     private static final int BUFFERED_PACKET_NUM = 1000;
     //Initial size of priority queue
