@@ -21,7 +21,7 @@
 # host where server is running
 SERVER_HOST=klovia.cs.st-andrews.ac.uk
 # port of server
-SERVER_PORT=23456
+SERVER_PORT=30753
 # the audio file that will be served
 AUDIO_FILE="Beastie_Boys_-_Now_Get_Busy.wav"
 # are we going to use netem? If not set, then no network parameters are changed

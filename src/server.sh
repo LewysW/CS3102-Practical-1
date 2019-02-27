@@ -6,12 +6,12 @@
 
 
 # the commands that run your program, e.g.,
-SERVER="java SimpleUDPServer"
+SERVER="java Server"
 #SERVER="myserver.py"
 # default port
-PORT=23456
+PORT=30751
 # the audio file
-AUDIOFILE=""
+AUDIOFILE="Beastie_Boys_-_Now_Get_Busy.wav"
 
 # DO NOT EDIT BELOW THIS LINE
 

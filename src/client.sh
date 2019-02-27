@@ -4,13 +4,13 @@
 # you should edit these variables to work with your code.
 
 # the commands that run your program, e.g.,
-CLIENT="java SimpleUDPClient"
+CLIENT="java Client"
 #SERVER="myclient.py"
 # default host
 HOST=klovia.cs.st-andrews.ac.uk
-PORT=23456
+PORT=30751
 # the file name that is written to
-FILENAME=""
+FILENAME="Client.wav"
 
 # DO NOT EDIT BELOW THIS LINE
 
