@@ -53,7 +53,6 @@ public class Server {
         byte[] outgoing;
 
         DatagramPacket receivedPacket = new DatagramPacket(incomingData, incomingData.length);
-        //serverSocket.setSoTimeout(0);
         //Loops and listens for incoming segments
         while (true) {
             serverSocket.receive(receivedPacket);
